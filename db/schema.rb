@@ -10,10 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_20_140918) do
+ActiveRecord::Schema.define(version: 2020_09_20_141320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "translation_requests", force: :cascade do |t|
+    t.string "original_language"
+    t.string "converted_language"
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_translation_requests_on_user_id"
+  end
+
+  create_table "translations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "translation_request_id", null: false
+    t.text "content"
+    t.string "language"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["translation_request_id"], name: "index_translations_on_translation_request_id"
+    t.index ["user_id"], name: "index_translations_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -27,4 +48,7 @@ ActiveRecord::Schema.define(version: 2020_09_20_140918) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "translation_requests", "users"
+  add_foreign_key "translations", "translation_requests"
+  add_foreign_key "translations", "users"
 end
