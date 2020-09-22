@@ -1,9 +1,17 @@
-<h1>TranslationRequests#new</h1>
-<p>Find me in app/views/translation_requests/new.html.erb</p>
 
-<%= simple_form_for @translation_request do |f| %>
-  <%= f.select :original_language, ["Ruby", "Javascript"], include_blank: "Select a Language" %>
-  <%= f.select :converted_language, ["Ruby", "Javascript"], include_blank: "Select a Language" %>
-  <%= f.input :content, as: :text %>
-  <%= f.button :submit %>
-<% end %>
+<div class="container">
+  <div class="row">
+    <div class="col-6 offset-3 p-4 bg-light border border-secondary translation-form">
+      <h3 class="translation-header"> Ask for a Translation </h3>
+      <p> Tap on our community of savvy coders 💻 </p>
+
+      <%= simple_form_for @translation_request do |f| %>
+      <%= f.select :original_language, ["Ruby", "Javascript"], include_blank: "your snippet is written in" %>
+      <%= f.select :converted_language, ["Ruby", "Javascript"], include_blank: "you need it tranlated into" %>
+      <%= f.input :content , as: :text, inline_label: 'Remember me',label: false, input_html: { class: "translation-content mt-3" }  %>
+      <%= f.button :submit, class: "btn btn-primary rounded-pill w-100" %>
+      <% end %>
+    </div>
+  </div>
+
+</div>
