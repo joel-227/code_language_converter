@@ -1,0 +1,9 @@
+<h1>TranslationRequests#new</h1>
+<p>Find me in app/views/translation_requests/new.html.erb</p>
+
+<%= simple_form_for @translation_request do |f| %>
+  <%= f.select :original_language, ["Ruby", "Javascript"], include_blank: "Select a Language" %>
+  <%= f.select :converted_language, ["Ruby", "Javascript"], include_blank: "Select a Language" %>
+  <%= f.input :content, as: :text %>
+  <%= f.button :submit %>
+<% end %>
