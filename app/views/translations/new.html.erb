@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="row">
+        <div class="col-5 offset-1 ">
+            <%= @translation_request.content %>
+        </div>
+        <div class="col-6">
+             <%= simple_form_for [@translation_request, @translation] do |f| %>
+                <%= f.input :content %>
+                <%= f.submit "Post Your Translation" %>
+             <% end %>
+        </div>
+    </div>
+</div>

@@ -7,7 +7,7 @@ class TranslationRequestsController < ApplicationController
     @translation_request = TranslationRequest.new(translation_request_params)
     @translation_request.user = current_user
     if @translation_request.save
-      redirect_to root_path
+      redirect_to translation_requests_path
     else
       render :new
     end
@@ -15,8 +15,11 @@ class TranslationRequestsController < ApplicationController
 
   def index
     @translation_requests = TranslationRequest.all 
-    
+
   end
+  
+  def show
+    en
 
   private
 
