@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="row">
+    <div class="col-6 offset-3">
+        <% @translation_requests.each  do |request|%>
+    
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <p class="card-text"> <%= request.content %> </p>
+              <a href="#" class="btn btn-primary"> Post a translation </a>
+            </div>
+       </div>
+       
+        <% end %>
+        </div>
+    </div>
+</div>

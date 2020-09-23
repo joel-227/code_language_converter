@@ -13,6 +13,11 @@ class TranslationRequestsController < ApplicationController
     end
   end
 
+  def index
+    @translation_requests = TranslationRequest.all 
+    
+  end
+
   private
 
   def translation_request_params
