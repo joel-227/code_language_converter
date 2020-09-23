@@ -2,19 +2,24 @@
     <div class="row">
     <div class="col-6 offset-3">
         <% @translation_requests.each  do |request|%>
-    
+
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-              <p class="card-text"> <%= request.content %> </p>
+              <p class="card-text">
+                <pre>
+                  <code class=<%= code_class(request) %> >
+                    <%= request.content %> </p>
+                  </code>
+                </pre>
               <hr>
               <p class="text-secondary"> Created at: <%= request.created_at.strftime('%b %d, %Y') %> </p>
               <p class="text-secondary">  From <%= request.original_language %> to <%= request.converted_language %> </p>
-              <%= link_to "Post a translation", 
+              <%= link_to "Post a translation",
                           new_translation_request_translation_path(request),
                           class: "btn btn-outline-primary rounded-pill" %>
             </div>
        </div>
-       
+
         <% end %>
         </div>
     </div>
