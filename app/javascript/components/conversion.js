@@ -8,6 +8,10 @@ const conversion = () => {
   const objectList = [];
   const functionList = [];
 
+  const lineDoesNotContainString = (aInput) => {
+    return !aInput.includes('"')
+  }
+
   const getResult = (regex, aInput, output) => {
     let match = regex.exec(aInput);
     if (match) {
@@ -53,7 +57,7 @@ const conversion = () => {
         matchTwo = matchTwo.toLowerCase();
         lowerCaseResetCounter = false;
       }
-      underscoreIndex = underscoreMatch.index;
+      let underscoreIndex = underscoreMatch.index;
       // matchTwo = matchTwo.replace(matchTwo[underscoreIndex + 1], matchTwo[underscoreIndex + 1].toUpperCase());
       let charArray = matchTwo.split("");
       charArray[underscoreIndex + 1] = charArray[underscoreIndex + 1].toUpperCase();
@@ -68,7 +72,7 @@ const conversion = () => {
   }
 
   const getVariableDefinition = (aInput) => {
-    const regex = /(\s*)(\w+)\s*(=)\s*(.+)/g;
+    const regex = /(\s*)(\w+)\s*(=)\s*[^=](.+)/g;
     let match = regex.exec(aInput);
     if (match && !variableList.includes(match[2]) && !functionParamList.includes(match[2]) && !objectList.includes(match[2]) && !functionList.includes(match[2])) {
       console.log(variableList);
@@ -117,7 +121,7 @@ const conversion = () => {
           const regexTwo = new RegExp(regexString, 'g');
           let match = regexTwo.exec(aInput);
           if (match) {
-            correctedWord = getCorrectConvention(match[3]);
+            let correctedWord = getCorrectConvention(match[3]);
             aInput = aInput.replace(match[3], correctedWord)
           }
         }
@@ -228,7 +232,7 @@ const conversion = () => {
   }
 
   const getIf = (aInput) => {
-    const regex = /(\s*)\b(if )(.+)/g;
+    const regex = /(\s*)\b(if |while )(.+)/g;
     let match;
     if (match = regex.exec(aInput)) {
       blockList.push("{")
@@ -264,6 +268,31 @@ const conversion = () => {
     return aInput;
   }
 
+  const getAnd = (aInput) => {
+    // const regex = /and(?=(?:(?:(?:[^"'\\]++|\\.)*+"'){2})*+(?:[^"'\\]++|\\.)*+$)/g;
+    // let match;
+    // if (match = regex.exec(aInput)) {
+    //   aInput = aInput.replace(regex, `&&`);
+    // }
+    const regex = /and/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      if (lineDoesNotContainString(aInput)) {
+        aInput = aInput.replace(regex, `&&`);
+      } else {
+        let matchString;
+        let counter = 0;
+        while (matchString = /("[^"]*\s*)(and)(\s*[^"]*")/g.exec(aInput)) {
+          if (counter % 2 === 0) {
+            aInput = aInput.replace(matchString[0], `${matchString[1]}tempword${matchString[3]}`);
+            counter += 1;
+          }
+        }
+      }
+    }
+    return aInput;
+  }
+
   const getNilToUndefined = (aInput) => {
     const regex = /\b(nil)\b/g;
     let match;
@@ -292,7 +321,7 @@ const conversion = () => {
     // backup_regex = "(\w+)"\s*=>\s*("[^"]*"|'[^']*'|\[[^]]+\]|\d+\.\d+|\d+|\w+)
     let match;
     while (match = /("\w+"|:\w+)\s*=>\s*/g.exec(aInput)) {
-      key = /(\w+)/g.exec(match[1]);
+      let key = /(\w+)/g.exec(match[1]);
       aInput = aInput.replace(match[0], `${key[1]}: `);
     }
       // }
@@ -320,18 +349,30 @@ const conversion = () => {
     return aInput;
   }
 
+  const getEmptytoLength = (aInput) => {
+    // change variable_name.empty? to variable_name.length==0
+    const regex = /^(\s*)(.*).empty\?$/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], `${match[2]}.length == 0`);
+    }
+    return aInput;
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const input = document.getElementById('input').value;
     output.innerHTML = "";
     const lines = input.split("\n");
     lines.forEach((input) => {
+      input = getConditional(input);
       input = getFunctionDefinition(input);
       input = getClassToTypeOf(input);
       input = getToUpperCase(input);
       input = getToLowerCase(input);
       input = getPush(input);
       input = getSplice(input);
+      input = getEmptytoLength(input);
       input = getInterpolation(input);
       input = getToInt(input);
       input = getToS(input);
@@ -350,11 +391,15 @@ const conversion = () => {
       input = getIf(input);
       input = getElse(input);
       input = getElseIf(input);
-      input = getConditional(input);
+      // input = getAnd(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
     variableList.length = 0;
+    functionParamList.length = 0;
+    blockList.length = 0;
+    objectList.length = 0;
+    functionList.length = 0;
   });
 }
 
