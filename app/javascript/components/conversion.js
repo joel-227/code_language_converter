@@ -7,9 +7,56 @@ const conversion = () => {
   const blockList = [];
   const objectList = [];
   const functionList = [];
-
+  
   const lineDoesNotContainString = (aInput) => {
-    return !aInput.includes('"')
+    return !(aInput.includes('"') || aInput.includes("'"))
+  }
+
+  const isInString = (aInput, matchStringZero) => {    
+    let quotationIndex = aInput.indexOf(matchStringZero);
+    let quotationCounter = 0;
+    for (let i = 0; i < quotationIndex; i++) {
+      if (aInput[i] === matchStringZero[0]) {
+        quotationCounter += 1
+      }
+    }
+    if (quotationCounter % 2 === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  const getKeyWord = (keyword, convertedWord, aInput) => {
+    // fix this function
+    let matchString;
+    let originalWords = [];
+    let tempWords = [];
+    let counter = 0;
+    let elseCounter = 0;
+    let whileCounter = 0;
+    while ((matchString = new RegExp(`(")([^"]*\\s*)(${keyword})(\\s*[^"]*)(")`, 'g').exec(aInput)) || (matchString = new RegExp(`(')([^']*\\s*)(${keyword})(\\s*[^']*)(')`, 'g').exec(aInput))) {
+      if (isInString(aInput, matchString[0])) {
+        console.log('hello');
+        console.log(matchString[0])
+        originalWords.push(matchString[0])
+        aInput = aInput.replace(matchString[0], `woah${counter}`);
+        tempWords.push(`woah${counter}`);
+        counter += 1;
+      } else {
+        console.log(matchString[0]);
+        aInput = aInput.replace(matchString[0], `${matchString[1]}${matchString[2]}${convertedWord}${matchString[4]}${matchString[5]}`);
+        elseCounter += 1;
+      }
+      whileCounter += 1;
+    }
+    if (counter > 0 && elseCounter !== whileCounter) {
+      const regex = new RegExp(`${keyword}`, "g");
+      aInput = aInput.replace(regex, `${convertedWord}`);
+      for (let i = 0; i < originalWords.length; i++) {
+        aInput = aInput.replace(tempWords[i], originalWords[i]);
+      }
+    }
+    return aInput;
   }
 
   const getResult = (regex, aInput, output) => {
@@ -132,6 +179,16 @@ const conversion = () => {
 
   }
 
+  const getPowertoPow = (aInput) => {
+    // change a ** b to Math.pow(a, b)
+    const regex = /^(\s*)(.*)(\s*)\*\*(\s*)(.*)$/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], `Math.pow(${match[2]}, ${match[5]})`);
+    }
+    return aInput;
+  }
+
   const getLastElement = (aInput) => {
     // change variable_name[-1] to variable_name[variableName.length - 1]
     let match;
@@ -199,6 +256,11 @@ const conversion = () => {
   const getPush = (aInput) => {
     const regex = /(\s*)(\w+)\s*<<\s+(.+)/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.push(${match[3]})`);
+  }
+
+  const getThis = (aInput) => {
+    const regex = /^(\s*)\@(.*)$/g;
+    return getResult(regex, aInput, (match) => `this._(${match[2]})`);
   }
 
   const getSplice = (aInput) => {
@@ -280,14 +342,7 @@ const conversion = () => {
       if (lineDoesNotContainString(aInput)) {
         aInput = aInput.replace(regex, `&&`);
       } else {
-        let matchString;
-        let counter = 0;
-        while (matchString = /("[^"]*\s*)(and)(\s*[^"]*")/g.exec(aInput)) {
-          if (counter % 2 === 0) {
-            aInput = aInput.replace(matchString[0], `${matchString[1]}tempword${matchString[3]}`);
-            counter += 1;
-          }
-        }
+        aInput = getKeyWord("and", "&&", aInput);
       }
     }
     return aInput;
@@ -376,6 +431,7 @@ const conversion = () => {
       input = getInterpolation(input);
       input = getToInt(input);
       input = getToS(input);
+      input = getThis(input);
       input = getLastElement(input);
       input = getSubString(input);
       input = getHashToObject(input);
@@ -389,9 +445,10 @@ const conversion = () => {
       input = getEndToBracket(input);
       input = getForEach(input);
       input = getIf(input);
+      input = getPowertoPow(input);
       input = getElse(input);
       input = getElseIf(input);
-      // input = getAnd(input);
+      input = getAnd(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
