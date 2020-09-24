@@ -7,7 +7,7 @@ const conversion = () => {
   const blockList = [];
   const objectList = [];
   const functionList = [];
-  
+
   const lineDoesNotContainString = (aInput) => {
     return !(aInput.includes('"') || aInput.includes("'"))
   }
@@ -36,14 +36,11 @@ const conversion = () => {
     let whileCounter = 0;
     while ((matchString = new RegExp(`(")([^"]*\\s*)(${keyword})(\\s*[^"]*)(")`, 'g').exec(aInput)) || (matchString = new RegExp(`(')([^']*\\s*)(${keyword})(\\s*[^']*)(')`, 'g').exec(aInput))) {
       if (isInString(aInput, matchString[0])) {
-        console.log('hello');
-        console.log(matchString[0])
         originalWords.push(matchString[0])
         aInput = aInput.replace(matchString[0], `woah${counter}`);
         tempWords.push(`woah${counter}`);
         counter += 1;
       } else {
-        console.log(matchString[0]);
         aInput = aInput.replace(matchString[0], `${matchString[1]}${matchString[2]}${convertedWord}${matchString[4]}${matchString[5]}`);
         elseCounter += 1;
       }
