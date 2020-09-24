@@ -1,12 +1,14 @@
-<div class="container">
+<div class="container pt-5">
     <div class="row">
-        <div class="col-5 offset-1 ">
-            <%= @translation_request.content %>
+        <div class="col-6 min-vh-75">
+           <pre class="mt-0 translation-post-request"> <code class= <%= code_class(@translation_request)  %> > <%= @translation_request.content %> </code></pre>
         </div>
-        <div class="col-6">
+        <div class="col-6 min-vh-75">
              <%= simple_form_for [@translation_request, @translation] do |f| %>
-                <%= f.input :content %>
-                <%= f.submit "Post Your Translation" %>
+                <%= f.input :content, label: false,
+                            input_html: { class: "form-translation", placeholder: "your code here"} %>
+                <%= f.submit "Post Your Translation",
+                              class: "btn btn-primary w-100 rounded-pill" %>
              <% end %>
         </div>
     </div>
