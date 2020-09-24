@@ -1,21 +1,38 @@
-<div class="container">
-    <div class="row">
-    <div class="col-6 offset-3">
-        <% @translation_requests.each  do |request|%>
-    
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-              <p class="card-text"> <%= request.content %> </p>
-              <hr>
-              <p class="text-secondary"> Created at: <%= request.created_at.strftime('%b %d, %Y') %> </p>
-              <p class="text-secondary">  From <%= request.original_language %> to <%= request.converted_language %> </p>
-              <%= link_to "Post a translation", 
-                          new_translation_request_translation_path(request),
-                          class: "btn btn-outline-primary rounded-pill" %>
+<div class="container pb-5">
+
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h2>Browse Translation Requests </h2>
+      <p> Help a fellow student advance their coding skills. </p>
+      <hr>
+      <% @translation_requests.each  do |request|%>
+
+      <div class="card">
+        <div class="card-body">
+            <pre>
+              <code class=<%= code_class(request) %> > <%= request.content %>
+              </code>
+            </pre>
+            <hr>
+
+            <div class="card-infos">
+              <div class="card-infos-top d-flex justify-content-between pb-3">
+                <p class="text-secondary"> <%= request.created_at.strftime('%b %d, %Y') %> </p>
+                <p class="text-secondary">  <%= request.original_language %> -> <%= request.converted_language %> </p>
+
+              </div>
+              <div class="card-infos-bottom d-flex justify-content-between">
+                <p class="align-self-center"> <%= pluralize(request.translations.size, "translation") %> </p>
+
+                <%= link_to "Translate",
+                new_translation_request_translation_path(request),
+                class: "align-self-center btn btn-outline-primary rounded-pill" %>
+              </div>
             </div>
-       </div>
-       
-        <% end %>
+          </div>
         </div>
+
+        <% end %>
+      </div>
     </div>
-</div>
+  </div>

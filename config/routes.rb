@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'translations/new'
+  get 'sandbox', to: "pages#sandbox"
   devise_for :users
   root to: 'pages#home'
   resources :translation_requests, only: [:new, :create, :index, :show] do
