@@ -1,0 +1,40 @@
+
+<div class="container pb-5">
+
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h2>Browse Your Translation Requests </h2>
+      <hr>
+      <% @translation_requests.each  do |request|%>
+
+      <div class="card">
+        <div class="card-body">
+            <pre>
+              <code class=<%= request_highlight(request) %> > <%= request.content %>
+              </code>
+            </pre>
+            <hr>
+
+            <div class="card-infos">
+              <div class="card-infos-top d-flex justify-content-between pb-3">
+                <p class="text-secondary"> <%= request.created_at.strftime('%b %d, %Y') %> </p>
+                <p class="text-secondary">  <%= request.original_language %> -> <%= request.converted_language %> </p>
+
+              </div>
+              <div class="card-infos-bottom d-flex justify-content-between">
+                <% if request.translations.count.zero? %>
+                  <p class="text-secondary align-self-center"> No translations yet</p>
+                <% else %>
+                <%= link_to pluralize(request.translations.size, "translation"), translation_request_path(request),   class: "text-secondary align-self-center"  %>
+                  <% end %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+
