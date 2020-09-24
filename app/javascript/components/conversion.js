@@ -459,10 +459,12 @@ const conversion = () => {
 
   const getFunctionCall = (aInput) => {
     const regex = /(\w+)(\([^\)]*\))*/g;
-    let match = regex.exec(aInput);
-    if (match && functionList.includes(match[1])) {
-      let matchOne = getCorrectConvention(match[1]);
-      aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+    let match;
+    while (match = regex.exec(aInput)) {
+      if (functionList.includes(match[1])) {
+        let matchOne = getCorrectConvention(match[1]);
+        aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+      }
     }
     return aInput;
   }
@@ -484,8 +486,8 @@ const conversion = () => {
     const lines = input.split("\n");
     lines.forEach((input) => {
       input = getConditional(input);
-      input = getFunctionDefinition(input);
       input = getFunctionCall(input);
+      input = getFunctionDefinition(input);
       input = getClassToTypeOf(input);
       input = getToUpperCase(input);
       input = getToLowerCase(input);
