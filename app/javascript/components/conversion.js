@@ -119,10 +119,10 @@ const conversion = () => {
   }
 
   const getVariableDefinition = (aInput) => {
-    const regex = /(\s*)(\w+)\s*(=)\s*[^=](.+)/g;
+    const regex = /(\s*)(\w+)\s*(=)\s*([^=].+)/g;
     let match = regex.exec(aInput);
     if (match && !variableList.includes(match[2]) && !functionParamList.includes(match[2]) && !objectList.includes(match[2]) && !functionList.includes(match[2])) {
-      console.log(variableList);
+      console.log(match);
       variableList.push(match[2]);
       variableList.push(getCorrectConvention(match[2]));
       if (match[2].toUpperCase() === match[2]) {
@@ -336,7 +336,7 @@ const conversion = () => {
     // if (match = regex.exec(aInput)) {
     //   aInput = aInput.replace(regex, `&&`);
     // }
-    const regex = /and/g;
+    const regex = /\band\b/g;
     let match;
     if (match = regex.exec(aInput)) {
       if (lineDoesNotContainString(aInput)) {
@@ -394,12 +394,16 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
-    const regex = /def (\w+)(\([^\)]*\))/g;
+    const regex = /def (\w+)(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
       blockList.push("{");
-      aInput = aInput.replace(match[0], `const ${match[1]} = ${match[2]} => {`);
+      if (match[2]) {
+        aInput = aInput.replace(match[0], `const ${match[1]} = ${match[2]} => {`);
+      } else {
+        aInput = aInput.replace(match[0], `const ${match[1]} = () => {`);
+      }
     }
     return aInput;
   }

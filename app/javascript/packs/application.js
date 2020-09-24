@@ -51,4 +51,5 @@ document.addEventListener('turbolinks:load', () => {
   // initSelect2();
   //conversion();
   //Prism.highlightAll();
+  conversion();
 });
