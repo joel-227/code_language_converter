@@ -445,12 +445,24 @@ const conversion = () => {
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
+      let matchOne = getCorrectConvention(match[1]);
+      functionList.push(matchOne);
       blockList.push("{");
       if (match[2]) {
-        aInput = aInput.replace(match[0], `const ${match[1]} = ${match[2]} => {`);
+        aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
       } else {
-        aInput = aInput.replace(match[0], `const ${match[1]} = () => {`);
+        aInput = aInput.replace(match[0], `const ${matchOne} = () => {`);
       }
+    }
+    return aInput;
+  }
+
+  const getFunctionCall = (aInput) => {
+    const regex = /(\w+)(\([^\)]*\))*/g;
+    let match = regex.exec(aInput);
+    if (match && functionList.includes(match[1])) {
+      let matchOne = getCorrectConvention(match[1]);
+      aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
     }
     return aInput;
   }
@@ -473,6 +485,7 @@ const conversion = () => {
     lines.forEach((input) => {
       input = getConditional(input);
       input = getFunctionDefinition(input);
+      input = getFunctionCall(input);
       input = getClassToTypeOf(input);
       input = getToUpperCase(input);
       input = getToLowerCase(input);
