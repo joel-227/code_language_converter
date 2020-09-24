@@ -1,2 +1,46 @@
 
-<p> If I am here, I have saved a translation successfully! </p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+       <h3> Original </h3>
+       <pre class="mt-0 translation-post-request">
+         <code class= <%= request_highlight(@translation_request) %>>
+            <%= @translation_request.content %>
+         </code>
+       </pre>
+    </div>
+    <div class="col-6">
+      <h3> Translations </h3>
+      <% @translation_request.translations.each do |translation| %>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-top d-flex justify-content-between align-items-center pb-2">
+            <div class="card-top-right">
+              <img class="avatar" src="https://kitt.lewagon.com/placeholder/users/libsyz"
+              alt=""> <small class="text-secondary"> <%= translation.user.email %> </small>
+            </div>
+            <div class="card-top-date">
+               <small class="text-secondary"> <%= translation.created_at.strftime('%b %d, %Y') %> </small>
+            </div>
+          </div>
+            <pre>
+            <code class= <%= translation_highlight(translation) %> >
+              <%= translation.content %>
+            </code>
+          </pre>
+          <div class="card-bottom d-flex justify-content-between align-items-center">
+            <div class="reaction d-flex align-items-center">
+              <img class="like-logo mr-2" src=<%= asset_path "like.svg" %> alt="">
+               <p class="small">20 likes</p>
+            </div>
+              <img class="copy-logo" src=<%= asset_path "copy_logo.svg" %> alt="">
+
+          </div>
+        </div>
+
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
