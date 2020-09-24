@@ -7,56 +7,81 @@ const conversion = () => {
   const blockList = [];
   const objectList = [];
   const functionList = [];
-  
-  const lineDoesNotContainString = (aInput) => {
-    return !(aInput.includes('"') || aInput.includes("'"))
-  }
+  const instanceVariableList = [];
 
-  const isInString = (aInput, matchStringZero) => {    
-    let quotationIndex = aInput.indexOf(matchStringZero);
-    let quotationCounter = 0;
-    for (let i = 0; i < quotationIndex; i++) {
-      if (aInput[i] === matchStringZero[0]) {
-        quotationCounter += 1
+  class Keyword {
+    constructor(keyword, convertedWord, aInput, isWord) {
+      this.keyword = keyword;
+      this.convertedWord = convertedWord;
+      this.input = aInput;
+      this.isWord = isWord;
+    }
+
+    lineDoesNotContainString() {
+      return !(this.input.includes('"') || this.input.includes("'"));
+    }
+
+    isInString(matchStringZero) {
+      let quotationIndex = this.input.indexOf(matchStringZero);
+      let quotationCounter = 0;
+      for (let i = 0; i < quotationIndex; i++) {
+        if (this.input[i] === matchStringZero[0]) {
+          quotationCounter += 1
+        }
       }
+      if (quotationCounter % 2 === 0) {
+        return true;
+      }
+      return false;
     }
-    if (quotationCounter % 2 === 0) {
-      return true;
+    
+    getKeyWord() {
+      // fix this function
+      let matchString;
+      let originalWords = [];
+      let tempWords = [];
+      let counter = 0;
+      let elseCounter = 0;
+      let whileCounter = 0;
+      while ((matchString = new RegExp(`(")([^"]*\\s*)(${this.keyword})(\\s*[^"]*)(")`, 'g').exec(this.input)) || (matchString = new RegExp(`(')([^']*\\s*)(${this.keyword})(\\s*[^']*)(')`, 'g').exec(this.input))) {
+        if (this.isInString(matchString[0])) {
+          originalWords.push(matchString[0])
+          this.input = this.input.replace(matchString[0], `woah${counter}`);
+          tempWords.push(`woah${counter}`);
+          counter += 1;
+        } else {
+          this.input = this.input.replace(matchString[0], `${matchString[1]}${matchString[2]}${this.convertedWord}${matchString[4]}${matchString[5]}`);
+          elseCounter += 1;
+        }
+        whileCounter += 1;
+      }
+      if (counter > 0 && elseCounter !== whileCounter) {
+        const regex = new RegExp(`${this.keyword}`, "g");
+        this.input = this.input.replace(regex, `${this.convertedWord}`);
+        for (let i = 0; i < originalWords.length; i++) {
+          this.input = this.input.replace(tempWords[i], originalWords[i]);
+        }
+      }
+      return this.input;
     }
-    return false;
-  }
 
-  const getKeyWord = (keyword, convertedWord, aInput) => {
-    // fix this function
-    let matchString;
-    let originalWords = [];
-    let tempWords = [];
-    let counter = 0;
-    let elseCounter = 0;
-    let whileCounter = 0;
-    while ((matchString = new RegExp(`(")([^"]*\\s*)(${keyword})(\\s*[^"]*)(")`, 'g').exec(aInput)) || (matchString = new RegExp(`(')([^']*\\s*)(${keyword})(\\s*[^']*)(')`, 'g').exec(aInput))) {
-      if (isInString(aInput, matchString[0])) {
-        console.log('hello');
-        console.log(matchString[0])
-        originalWords.push(matchString[0])
-        aInput = aInput.replace(matchString[0], `woah${counter}`);
-        tempWords.push(`woah${counter}`);
-        counter += 1;
+    result() {
+      let regex;
+      if (this.isWord) {
+        regex = new RegExp(`\\b${this.keyword}\\b`, "g");
       } else {
-        console.log(matchString[0]);
-        aInput = aInput.replace(matchString[0], `${matchString[1]}${matchString[2]}${convertedWord}${matchString[4]}${matchString[5]}`);
-        elseCounter += 1;
+        regex = new RegExp(`\\B${this.keyword}\\B`, "g");
       }
-      whileCounter += 1;
-    }
-    if (counter > 0 && elseCounter !== whileCounter) {
-      const regex = new RegExp(`${keyword}`, "g");
-      aInput = aInput.replace(regex, `${convertedWord}`);
-      for (let i = 0; i < originalWords.length; i++) {
-        aInput = aInput.replace(tempWords[i], originalWords[i]);
+      let match;
+      if (match = regex.exec(this.input)) {
+        if (this.lineDoesNotContainString()) {
+          this.input = this.input.replace(regex, `${this.convertedWord}`);
+        } else {
+          this.input = this.getKeyWord();
+        }
       }
+      return this.input
     }
-    return aInput;
   }
 
   const getResult = (regex, aInput, output) => {
@@ -119,10 +144,10 @@ const conversion = () => {
   }
 
   const getVariableDefinition = (aInput) => {
-    const regex = /(\s*)(\w+)\s*(=)\s*[^=](.+)/g;
+    const regex = /(\s*)(\w+)\s*(=)\s*([^=].+)/g;
     let match = regex.exec(aInput);
-    if (match && !variableList.includes(match[2]) && !functionParamList.includes(match[2]) && !objectList.includes(match[2]) && !functionList.includes(match[2])) {
-      console.log(variableList);
+    if (match && !variableList.includes(match[2]) && !functionParamList.includes(match[2]) && !objectList.includes(match[2]) && !functionList.includes(match[2]) && !instanceVariableList.includes(match[2])) {
+      console.log(match);
       variableList.push(match[2]);
       variableList.push(getCorrectConvention(match[2]));
       if (match[2].toUpperCase() === match[2]) {
@@ -259,102 +284,124 @@ const conversion = () => {
   }
 
   const getThis = (aInput) => {
-    const regex = /^(\s*)\@(.*)$/g;
-    return getResult(regex, aInput, (match) => `this._(${match[2]})`);
+    const regex = /(\s*)\@(\w+)/g;
+    let match = regex.exec(aInput);
+    if (match) {
+      instanceVariableList.push(match[2]);
+      let matchTwo = getCorrectConvention(match[2]);
+      instanceVariableList.push(matchTwo);
+      aInput = aInput.replace(regex, `${match[1]}this.${matchTwo}`);
+    }
+    return aInput;
   }
 
   const getSplice = (aInput) => {
-    const regex = /(\s*)(\w+)\.delete_at\(\s*(\d+)\s*\)/g;
-    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.splice(${match[3]}, 1)`);
+    let myResult = new Keyword("\\.delete_at", "\\.delete_at", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)(\w+)\.delete_at\(\s*(\d+)\s*\)/g;
+      return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.splice(${match[3]}, 1)`);
+    } else {
+      return myResult.result();
+    }
   }
 
   const getForEach = (aInput) => {
-    const regex = /(\s*)(\w+).each do \|(\w+)\|/g;
-    let match;
-    while (match = regex.exec(aInput)) {
-      functionParamList.push(match[3]);
-      blockList.push("{(")
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.forEach((${match[3]}) => {`)
+    let myResult = new Keyword("\\.each", "\\.each", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)(\w+).each do \|(\w+)\|/g;
+      let match;
+      while (match = regex.exec(aInput)) {
+        functionParamList.push(match[3]);
+        blockList.push("{(")
+        aInput = aInput.replace(regex, `${match[1]}${match[2]}.forEach((${match[3]}) => {`)
+      }
+      return aInput;
+    } else {
+      return myResult.result();
     }
-    return aInput;
   }
 
   const getEndToBracket = (aInput) => {
-    const regex = /(\s*)end/g;
-    let match;
-    while (match = regex.exec(aInput)) {
-      if (blockList[blockList.length - 1] == "{(") {
-        aInput = aInput.replace(regex, `${match[1]}})`);
-      } else {
-        aInput = aInput.replace(regex, `${match[1]}}`);
+    let myResult = new Keyword("end", "end", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)end/g;
+      let match;
+      while (match = regex.exec(aInput)) {
+        if (blockList[blockList.length - 1] == "{(") {
+          aInput = aInput.replace(regex, `${match[1]}})`);
+        } else {
+          aInput = aInput.replace(regex, `${match[1]}}`);
+        }
+        blockList.pop();
       }
-      blockList.pop();
+      return aInput
+    } else {
+      return myResult.result();
     }
-    return aInput
+
   }
 
   const getIf = (aInput) => {
-    const regex = /(\s*)\b(if |while )(.+)/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      blockList.push("{")
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}(${match[3]}) {`);
+    let myResult = new Keyword("if", "if", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)\b(if |while )(.+)/g;
+      let match;
+      if (match = regex.exec(aInput)) {
+        blockList.push("{")
+        aInput = aInput.replace(regex, `${match[1]}${match[2]}(${match[3]}) {`);
+      }
+      return aInput;
+    } else {
+      return myResult.result();
     }
-    return aInput;
   }
 
   const getElse = (aInput) => {
-    const regex = /(\s*)(else)(\s*)/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      aInput = aInput.replace(regex, `${match[1]}} ${match[2]} {`)
+    let myResult = new Keyword("else", "else", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)(else)(\s*)/g;
+      let match;
+      if (match = regex.exec(aInput)) {
+        aInput = aInput.replace(regex, `${match[1]}} ${match[2]} {`)
+      }
+      return aInput;
+    } else {
+      return myResult.result();
     }
-    return aInput;
   }
 
   const getElseIf = (aInput) => {
-    const regex = /(\s*)(elsif )(.+)/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      aInput = aInput.replace(regex, `${match[1]}} else if (${match[3]}) {`);
+    let myResult = new Keyword("elsif", "elsif", aInput, true);
+    if (myResult.lineDoesNotContainString()) {
+      const regex = /(\s*)(elsif )(.+)/g;
+      let match;
+      if (match = regex.exec(aInput)) {
+        aInput = aInput.replace(regex, `${match[1]}} else if (${match[3]}) {`);
+      }
+      return aInput;
+    } else {
+      return myResult.result();
     }
-    return aInput;
   }
 
   const getConditional = (aInput) => {
-    const regex = /(\s*)(==)(\s*)/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      aInput = aInput.replace(regex, `${match[1]}===${match[3]}`);
-    }
-    return aInput;
+    let myResult = new Keyword("==", "===", aInput, false);
+    return myResult.result();
   }
 
   const getAnd = (aInput) => {
-    // const regex = /and(?=(?:(?:(?:[^"'\\]++|\\.)*+"'){2})*+(?:[^"'\\]++|\\.)*+$)/g;
-    // let match;
-    // if (match = regex.exec(aInput)) {
-    //   aInput = aInput.replace(regex, `&&`);
-    // }
-    const regex = /and/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      if (lineDoesNotContainString(aInput)) {
-        aInput = aInput.replace(regex, `&&`);
-      } else {
-        aInput = getKeyWord("and", "&&", aInput);
-      }
-    }
-    return aInput;
+    let myResult = new Keyword("and", "&&", aInput, true);
+    return myResult.result();
+  }
+
+  const getOr = (aInput) => {
+    let myResult = new Keyword("or", "||", aInput, true);
+    return myResult.result();
   }
 
   const getNilToUndefined = (aInput) => {
-    const regex = /\b(nil)\b/g;
-    let match;
-    if (match = regex.exec(aInput)) {
-      aInput = aInput.replace(regex, `undefined`)
-    }
-    return aInput;
+    let myResult = new Keyword("nil", "undefined", aInput, true);
+    return myResult.result();
   }
 
   const getHashToObject = (aInput) => {    
@@ -394,12 +441,28 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
-    const regex = /def (\w+)(\([^\)]*\))/g;
+    const regex = /def (\w+)(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
+      let matchOne = getCorrectConvention(match[1]);
+      functionList.push(matchOne);
       blockList.push("{");
-      aInput = aInput.replace(match[0], `const ${match[1]} = ${match[2]} => {`);
+      if (match[2]) {
+        aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
+      } else {
+        aInput = aInput.replace(match[0], `const ${matchOne} = () => {`);
+      }
+    }
+    return aInput;
+  }
+
+  const getFunctionCall = (aInput) => {
+    const regex = /(\w+)(\([^\)]*\))*/g;
+    let match = regex.exec(aInput);
+    if (match && functionList.includes(match[1])) {
+      let matchOne = getCorrectConvention(match[1]);
+      aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
     }
     return aInput;
   }
@@ -422,6 +485,7 @@ const conversion = () => {
     lines.forEach((input) => {
       input = getConditional(input);
       input = getFunctionDefinition(input);
+      input = getFunctionCall(input);
       input = getClassToTypeOf(input);
       input = getToUpperCase(input);
       input = getToLowerCase(input);
@@ -431,9 +495,9 @@ const conversion = () => {
       input = getInterpolation(input);
       input = getToInt(input);
       input = getToS(input);
-      input = getThis(input);
       input = getLastElement(input);
       input = getSubString(input);
+      input = getThis(input);
       input = getHashToObject(input);
       input = getHashKeyValue(input);
       input = getCallHash(input);
@@ -449,6 +513,7 @@ const conversion = () => {
       input = getElse(input);
       input = getElseIf(input);
       input = getAnd(input);
+      input = getOr(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
@@ -457,6 +522,7 @@ const conversion = () => {
     blockList.length = 0;
     objectList.length = 0;
     functionList.length = 0;
+    instanceVariableList.length = 0;
   });
 }
 
