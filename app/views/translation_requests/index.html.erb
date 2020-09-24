@@ -10,7 +10,7 @@
       <div class="card">
         <div class="card-body">
             <pre>
-              <code class=<%= code_class(request) %> > <%= request.content %>
+              <code class=<%= request_highlight(request) %> > <%= request.content %>
               </code>
             </pre>
             <hr>
@@ -22,8 +22,11 @@
 
               </div>
               <div class="card-infos-bottom d-flex justify-content-between">
-                <p class="align-self-center"> <%= pluralize(request.translations.size, "translation") %> </p>
-
+                <% if request.translations.count.zero? %>
+                  <p class="text-secondary align-self-center"> No translations yet</p>
+                <% else %>
+                <%= link_to pluralize(request.translations.size, "translation"), translation_request_path(request),   class: "text-secondary align-self-center"  %>
+                  <% end %>
                 <%= link_to "Translate",
                 new_translation_request_translation_path(request),
                 class: "align-self-center btn btn-outline-primary rounded-pill" %>
