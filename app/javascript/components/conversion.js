@@ -8,6 +8,7 @@ const conversion = () => {
   const objectList = [];
   const functionList = [];
   const instanceVariableList = [];
+  let isIfInOneLine = false;
 
   class Keyword {
     constructor(keyword, convertedWord, aInput, isWord) {
@@ -112,7 +113,7 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[1]}typeof(${match[2]})`);
   }
   const getToInt = (aInput) => {
-    const regex = /(\s*)(".*"|'.*'|\w+|\d+\.\d+)\.to_i\s*/g;
+    const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.to_i\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}parseInt(${match[2]}, 10)`);
   }
   const getToS = (aInput) => {
@@ -341,9 +342,19 @@ const conversion = () => {
 
   }
 
+  const getReturnOneLineIf = (aInput) => {
+    const regex = /(return)(.+)\s+(if )(.+)/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      aInput = aInput.replace(regex, `${match[3]}(${match[4]}) ${match[1]}${match[2]}`);
+      isIfInOneLine = true;
+    }
+    return aInput
+  }
+
   const getIf = (aInput) => {
     let myResult = new Keyword("if", "if", aInput, true);
-    if (myResult.lineDoesNotContainString()) {
+    if (myResult.lineDoesNotContainString() && !isIfInOneLine) {
       const regex = /(\s*)\b(if |while )(.+)/g;
       let match;
       if (match = regex.exec(aInput)) {
@@ -352,6 +363,7 @@ const conversion = () => {
       }
       return aInput;
     } else {
+      isIfInOneLine = false;
       return myResult.result();
     }
   }
@@ -479,6 +491,15 @@ const conversion = () => {
     return aInput;
   }
 
+  const getSemiColon = (aInput) => {
+    let tempInput = aInput.trim();
+    console.log(tempInput);
+    if (['{', '}', ','].includes(tempInput[tempInput.length - 1]) || aInput.length === 0) {
+      return aInput;
+    }
+    return aInput + ';';
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const input = document.getElementById('input').value;
@@ -510,6 +531,7 @@ const conversion = () => {
       input = getIncludeToIndexOf(input);
       input = getEndToBracket(input);
       input = getForEach(input);
+      input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
       input = getElse(input);
@@ -517,6 +539,7 @@ const conversion = () => {
       input = getAnd(input);
       input = getOr(input);
       input = getNilToUndefined(input);
+      input = getSemiColon(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
     variableList.length = 0;
