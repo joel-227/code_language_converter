@@ -1,9 +1,9 @@
+
 <div class="container pb-5">
 
   <div class="row">
     <div class="col-8 offset-2">
-      <h2>Browse Translation Requests </h2>
-      <p> Help a fellow student advance their coding skills. </p>
+      <h2>Browse Your Translation Requests </h2>
       <hr>
       <% @translation_requests.each  do |request|%>
 
@@ -27,9 +27,7 @@
                 <% else %>
                 <%= link_to pluralize(request.translations.size, "translation"), translation_request_path(request),   class: "text-secondary align-self-center"  %>
                   <% end %>
-                <%= link_to "Translate",
-                new_translation_request_translation_path(request),
-                class: "align-self-center btn btn-outline-primary rounded-pill" %>
+
               </div>
             </div>
           </div>
@@ -39,3 +37,4 @@
       </div>
     </div>
   </div>
+

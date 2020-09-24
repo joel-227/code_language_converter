@@ -9,6 +9,7 @@ class TranslationsController < ApplicationController
     @translation.user = current_user
     @translation_request = TranslationRequest.find(params[:translation_request_id])
     @translation.translation_request = @translation_request
+    @translation.language = @translation_request.converted_language
     if @translation.save
       flash[:notice] = "Your translation has been submitted"
       redirect_to translation_request_path(@translation_request)

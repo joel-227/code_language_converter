@@ -19,6 +19,7 @@ class TranslationRequestsController < ApplicationController
   end
 
   def show
+    @translation_request = TranslationRequest.find(params[:id])
   end
 
   private
