@@ -131,7 +131,7 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[1]}parseInt(${match[2]}, 10)`);
   }
   const getZeroToNExclusiveArray = (aInput) => {
-    const regex = /^(\s*)\(0...(.*)\).to_a$/g;
+    const regex = /^(\s*)\(0\.\.\.(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]}}).map(Function.call, Number)`);
   }
   const getToS = (aInput) => {
@@ -150,6 +150,11 @@ const conversion = () => {
     const regex = /^(\s*)\((.*)\.\.(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[3]} - ${match[2]} + 1}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
   }
+  const getBToAExclusiveArray = (aInput) => {
+    const regex = /^(\s*)\((.*)\.\.\.(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[3]} - ${match[2]}}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+  }
+
 
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
@@ -553,6 +558,7 @@ const conversion = () => {
       input = getZeroToNExclusiveArray(input);
       input = getBToAInclusiveArray(input);
       input = getDestReverse(input);
+      input = getBToAExclusiveArray(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
