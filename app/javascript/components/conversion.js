@@ -134,7 +134,10 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
   }
-
+  const getDestReverse = (aInput) => {
+    const regex = /^(\s*)(\w+).reverse!$/g;
+    return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
+  }
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
     let lowerCaseResetCounter = true;
@@ -533,6 +536,7 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
+      input = getDestReverse(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
