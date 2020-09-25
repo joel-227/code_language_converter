@@ -25,7 +25,7 @@
             </div>
           </div>
             <pre>
-            <code class= <%= translation_highlight(translation) %> >
+            <code id=<%= "translation#{translation.id}" %> class= <%= translation_highlight(translation) %> >
               <%= translation.content %>
             </code>
           </pre>
@@ -35,7 +35,9 @@
                    data-translation-id=<%= translation.id %> src=<%= asset_path "like.svg" %> alt="">
                <p class="small"> <%= translation.likes %> likes</p>
             </div>
-              <img class="copy-logo" src=<%= asset_path "copy_logo.svg" %> alt="">
+              <img class="copy-logo"
+                   data-clipboard-target= <%= "#translation#{translation.id}"  %>
+                   src=<%= asset_path "copy_logo.svg" %> alt="">
 
           </div>
         </div>
