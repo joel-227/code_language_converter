@@ -103,9 +103,9 @@ const conversion = () => {
     const regex = /^(\s*)(.*).all\?$/g;
     return getResult(regex, aInput, (match) => `${match[2]}.every()`);
   }
-  const getIncludeToIndexOf = (aInput) => {
+  const getIncludeToIncludes = (aInput) => {
     const regex = /^(\s*)(.*).include\?\((.*)\)$/g;
-    return getResult(regex, aInput, (match) => `${match[2]}.indexOf(${match[3]}) != -1`);
+    return getResult(regex, aInput, (match) => `${match[2]}.includes(${match[3]})`);
   }
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
@@ -131,9 +131,21 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.to_i\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}parseInt(${match[2]}, 10)`);
   }
+  const getZeroToNExclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0...(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]}}).map(Function.call, Number)`);
+  }
   const getToS = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
+  }
+  const getDestReverse = (aInput) => {
+    const regex = /^(\s*)(\w+).reverse!$/g;
+    return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
+  }
+  const getZeroToNInclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0..(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
   }
 
   const getCorrectConvention = (matchTwo) => {
@@ -547,7 +559,7 @@ const conversion = () => {
       input = getVariableDefinition(input);
       input = getPutsToConsoleLog(input);
       input = getAllToEvery(input);
-      input = getIncludeToIndexOf(input);
+      input = getIncludeToIncludes(input);
       input = getEndToBracket(input);
       input = getForEach(input);
       input = getReturnOneLineIf(input);
@@ -557,6 +569,9 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
+      input = getZeroToNInclusiveArray(input);
+      input = getZeroToNExclusiveArray(input);
+      input = getDestReverse(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
