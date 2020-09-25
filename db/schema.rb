@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_20_141320) do
+ActiveRecord::Schema.define(version: 2020_09_25_031953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2020_09_20_141320) do
     t.string "language"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "likes", default: 0
     t.index ["translation_request_id"], name: "index_translations_on_translation_request_id"
     t.index ["user_id"], name: "index_translations_on_user_id"
   end

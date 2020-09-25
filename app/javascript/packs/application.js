@@ -30,7 +30,8 @@ import "bootstrap";
 
 // Internal imports, e.g:
 // import { initSelect2 } from '../components/init_select2';
-import conversion from '../components/conversion.js'
+import conversion  from '../components/conversion.js';
+import { addLike } from '../plugins/add_like.js';
 
 
 
@@ -49,6 +50,7 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
-  conversion();
+  // conversion();
+  addLike();
   Prism.highlightAll();
 });
