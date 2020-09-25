@@ -102,9 +102,9 @@ const conversion = () => {
     const regex = /^(\s*)(.*).all\?$/g;
     return getResult(regex, aInput, (match) => `${match[2]}.every()`);
   }
-  const getIncludeToIndexOf = (aInput) => {
+  const getIncludeToIncludes = (aInput) => {
     const regex = /^(\s*)(.*).include\?\((.*)\)$/g;
-    return getResult(regex, aInput, (match) => `${match[2]}.indexOf(${match[3]}) != -1`);
+    return getResult(regex, aInput, (match) => `${match[2]}.includes(${match[3]})`);
   }
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
@@ -536,7 +536,7 @@ const conversion = () => {
       input = getVariableDefinition(input);
       input = getPutsToConsoleLog(input);
       input = getAllToEvery(input);
-      input = getIncludeToIndexOf(input);
+      input = getIncludeToIncludes(input);
       input = getEndToBracket(input);
       input = getForEach(input);
       input = getIf(input);
