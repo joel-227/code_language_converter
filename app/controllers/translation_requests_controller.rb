@@ -9,6 +9,9 @@ class TranslationRequestsController < ApplicationController
     if @translation_request.save
       redirect_to translation_requests_path
     else
+      if @translation_request.errors[:languages]
+        flash[:notice] = @translation_request.errors[:languages]
+      end
       render :new
     end
   end
