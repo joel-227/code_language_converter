@@ -131,11 +131,38 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.to_i\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}parseInt(${match[2]}, 10)`);
   }
+  const getZeroToNExclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0\.\.\.(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]}}).map(Function.call, Number)`);
+  }
   const getToS = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
   }
-
+  const getDestReverse = (aInput) => {
+    const regex = /^(\s*)(\w+).reverse!$/g;
+    return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
+  }
+  const getZeroToNInclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0..(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[2]} + 1)}).map(Function.call, Number)`);
+  }
+  const getBToAInclusiveArray = (aInput) => {
+    const regex = /^(\s*)\((.*)\.\.(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[3]} - ${match[2]} + 1)}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+  }
+  const getBToAExclusiveArray = (aInput) => {
+    const regex = /^(\s*)\((.*)\.\.\.(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[3]} - ${match[2]})}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+  }
+  const getMaxInArrayList = (aInput) => {
+    const regex = /^(\s*)(.*).max$/g;
+    return getResult(regex, aInput, (match) => `Math.max.apply(Math, ${match[2]})`);
+  }
+  // const getMinInArrayList = (aInput) => {
+  //   const regex = /^(\s*)(.*).min$/g;
+  //   return getResult(regex, aInput, (match) => `Math.min.apply(Math, ${match[2]})`);
+  // }
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
     let lowerCaseResetCounter = true;
@@ -557,6 +584,12 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
+      input = getZeroToNInclusiveArray(input);
+      input = getZeroToNExclusiveArray(input);
+      input = getBToAInclusiveArray(input);
+      input = getDestReverse(input);
+      input = getBToAExclusiveArray(input);
+      input = getMaxInArrayList(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
