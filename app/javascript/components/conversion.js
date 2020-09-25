@@ -158,10 +158,10 @@ const conversion = () => {
     const regex = /^(\s*)(.*).max$/g;
     return getResult(regex, aInput, (match) => `Math.max.apply(Math, ${match[2]})`);
   }
-  // const getMinInArrayList = (aInput) => {
-  //   const regex = /^(\s*)(.*).min$/g;
-  //   return getResult(regex, aInput, (match) => `Math.min.apply(Math, ${match[2]})`);
-  // }
+  const getMinInArrayList = (aInput) => {
+    const regex = /^(\s*)(.*).min$/g;
+    return getResult(regex, aInput, (match) => `Math.min.apply(Math, ${match[2]})`);
+  }
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
     let lowerCaseResetCounter = true;
@@ -566,6 +566,7 @@ const conversion = () => {
       input = getDestReverse(input);
       input = getBToAExclusiveArray(input);
       input = getMaxInArrayList(input);
+      input = getMinInArrayList(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
     });
