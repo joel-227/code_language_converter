@@ -1,0 +1,12 @@
+
+<div class="profile-info d-flex justify-content-around align-items-center py-4">
+  <div class="profile-edit">
+    <img class="avatar-large pb-2" src="https://kitt.lewagon.com/placeholder/users/ssaunier" alt="">
+    <p class="text-secondary pb-2"> Joined at <%= current_user.created_at.strftime('%b %d, %Y') %> </p>
+    <a class="btn-sm btn-primary"> Edit Your Profile </a>
+  </div>
+  <div class="profile-translation-info">
+    <p> 🗒 <%= pluralize(current_user.translation_requests.count, "translation request") + " submitted" %>  </p>
+    <p>🔏 <%= pluralize(current_user.translations.count, "translation") + " submitted" %> </p>
+  </div>
+</div>
