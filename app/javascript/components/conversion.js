@@ -138,6 +138,10 @@ const conversion = () => {
     const regex = /^(\s*)(\w+).reverse!$/g;
     return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
   }
+  const getZeroToNInclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0..(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
+  }
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
     let lowerCaseResetCounter = true;
@@ -536,6 +540,7 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
+      input = getZeroToNInclusiveArray(input);
       input = getDestReverse(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
