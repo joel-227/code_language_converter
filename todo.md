@@ -24,8 +24,23 @@ it should not be empty
 Design
 -------
 
-- Custom User Avatars
-- Highlight Buttons and Logos
 - Own Look an feel
+-> Override Bootstrap
 
+ [X] - Own fonts
+ [X] - Own Colors
+
+ [X] - Customize the Navbar a bit
+ [] - Add a Footer
+
+ --- Stretch Goal --
+
+ [] - Add a User Profile Header
+
+- Custom User Avatars
+ [] - Change the db schema so users can have img-url
+ [] -
+
+- Highlight Buttons and Logos
+ [] - We need to install Fontawesome
 
