@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
   resources :translation, only: [:show] do
-    resource :likes, only: [:create]
+    resource :likes, only: [:create, :destroy]
   end
 end
 
