@@ -118,7 +118,10 @@ const conversion = () => {
     const regex = /^(\s*)(\w+).last$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[${match[2]}.length - 1]`);
   }
-
+  const getLastN = (aInput) => {
+    const regex = /^(\s*)(\w+).last\((.*)\)$/g;
+    return getResult(regex, aInput, (match) => `${match[2]}.slice(-${match[3]})`);
+  }
   const getClassToTypeOf = (aInput) => {
     const regex = /(\s*)(\S*|".*"\S*|'.*'\S*)\.class\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}typeof(${match[2]})`);
@@ -508,6 +511,7 @@ const conversion = () => {
       input = getToInt(input);
       input = getFirst(input);
       input = getFirstN(input);
+      input = getLastN(input);
       input = getLast(input);
       input = getToS(input);
       input = getLastElement(input);
