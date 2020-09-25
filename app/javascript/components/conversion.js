@@ -144,15 +144,15 @@ const conversion = () => {
   }
   const getZeroToNInclusiveArray = (aInput) => {
     const regex = /^(\s*)\(0..(.*)\).to_a$/g;
-    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[2]} + 1)}).map(Function.call, Number)`);
   }
   const getBToAInclusiveArray = (aInput) => {
     const regex = /^(\s*)\((.*)\.\.(.*)\).to_a$/g;
-    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[3]} - ${match[2]} + 1}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[3]} - ${match[2]} + 1)}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
   }
   const getBToAExclusiveArray = (aInput) => {
     const regex = /^(\s*)\((.*)\.\.\.(.*)\).to_a$/g;
-    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[3]} - ${match[2]}}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: (${match[3]} - ${match[2]})}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
   }
 
 
