@@ -33,6 +33,7 @@ import "bootstrap";
 import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
+import activateConversion from "../components/conversion.js"
 
 
 Prism.plugins.NormalizeWhitespace.setDefaults({
@@ -50,7 +51,7 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
-  conversion();
+  activateConversion();
   activateClipboard();
   addLike();
   Prism.highlightAll();

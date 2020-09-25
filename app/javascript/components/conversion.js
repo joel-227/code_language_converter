@@ -598,4 +598,12 @@ const conversion = () => {
   });
 }
 
-export default conversion
+
+const activateConversion = () => {
+  const form = document.getElementById('form');
+  console.log(form);
+  if (form) {
+    conversion();
+  }
+}
+export default activateConversion
