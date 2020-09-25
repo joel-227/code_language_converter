@@ -130,6 +130,10 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\w+|\d+\.\d+)\.to_i\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}parseInt(${match[2]}, 10)`);
   }
+  const getZeroToNExclusiveArray = (aInput) => {
+    const regex = /^(\s*)\(0...(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]}}).map(Function.call, Number)`);
+  }
   const getToS = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
@@ -142,6 +146,7 @@ const conversion = () => {
     const regex = /^(\s*)\(0..(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
   }
+
   const getCorrectConvention = (matchTwo) => {
     const underscoreRegex = /_/g;
     let lowerCaseResetCounter = true;
@@ -541,6 +546,7 @@ const conversion = () => {
       input = getAnd(input);
       input = getOr(input);
       input = getZeroToNInclusiveArray(input);
+      input = getZeroToNExclusiveArray(input);
       input = getDestReverse(input);
       input = getNilToUndefined(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
