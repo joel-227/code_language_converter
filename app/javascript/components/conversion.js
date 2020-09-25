@@ -110,6 +110,10 @@ const conversion = () => {
     const regex = /^(\s*)(\w+).first$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[0]`);
   }
+  const getFirstN = (aInput) => {
+    const regex = /^(\s*)(\w+).first\((.*)\)$/g;
+    return getResult(regex, aInput, (match) => `${match[2]}.slice(0, ${match[3]})`);
+  }
   const getClassToTypeOf = (aInput) => {
     const regex = /(\s*)(\S*|".*"\S*|'.*'\S*)\.class\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}typeof(${match[2]})`);
@@ -498,6 +502,7 @@ const conversion = () => {
       input = getInterpolation(input);
       input = getToInt(input);
       input = getFirst(input);
+      input = getFirstN(input);
       input = getToS(input);
       input = getLastElement(input);
       input = getSubString(input);
