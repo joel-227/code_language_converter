@@ -31,8 +31,9 @@
           </pre>
           <div class="card-bottom d-flex justify-content-between align-items-center">
             <div class="reaction d-flex align-items-center">
-              <img class="like-logo mr-2" src=<%= asset_path "like.svg" %> alt="">
-               <p class="small">20 likes</p>
+              <img class="like-logo mr-2 "
+                   data-translation-id=<%= translation.id %> src=<%= asset_path "like.svg" %> alt="">
+               <p class="small"> <%= translation.likes %> likes</p>
             </div>
               <img class="copy-logo" src=<%= asset_path "copy_logo.svg" %> alt="">
 

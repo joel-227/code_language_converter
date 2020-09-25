@@ -11,18 +11,24 @@ const addLike = () => {
 }
 
 const upvote = (event) => {
-  fetch(`/translation/5/likes`, {
+    console.log(event.target.dataset)
+    const translationId = event.target.dataset.translationId
+
+    fetch(`/translation/${translationId}/likes`, {
         method: 'POST',
         credential: "same-origin",
         headers: { "Accept": "application/json",
                    "Content-Type": "application/json",
                    "X-CSRF-Token": csrfToken() }
          }).then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+         // Need update the dom
+         const likesNumber = event.target.nextElementSibling;
+         likesNumber.innerText = `${data.likes} likes`;
+        })
 
   // Go to the likes controller and add a like to a given
   // translation
-  // Need update the dom
 }
 
 export { addLike as addLike };
