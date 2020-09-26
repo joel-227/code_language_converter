@@ -24,6 +24,8 @@ require("packs/prism")
 
 // External imports
 import "bootstrap";
+
+import "codemirror/mode/ruby/ruby.js"
 //import Prism from 'prismjs';
 // import * from 'prismjs/themes/prism.css'
 
@@ -47,6 +49,8 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
   'tabs-to-spaces': 4,
   'spaces-to-tabs': 4*/
 });
+
+
 
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
