@@ -1,16 +1,19 @@
 import CodeMirror from "codemirror";
+import "codemirror/mode/ruby/ruby.js"
+import "codemirror/mode/javascript/javascript.js"
 
 const conversion = () => {
   const form = document.getElementById('form');
   const output = document.getElementById('output');
   const inputField = document.getElementById('input');
   let inputEditor = CodeMirror.fromTextArea(inputField, {
-    lineNumbers: true
+    lineNumbers: true,
+    mode: "ruby"
   })
   let outputEditor = CodeMirror.fromTextArea(output, {
-    lineNumbers: true
+    lineNumbers: true,
+    mode: "javascript"
   })
-
 
 
   const variableList = [];
@@ -659,6 +662,7 @@ const conversion = () => {
       testInput.value = `random_number = [1, 2, 3].sample\nif random_number == 1\n  puts "one"\nelsif random_number == 2\n  puts "two"\nelse\n  puts "three"\nend`;
       inputEditor.getDoc().setValue(testInput.value);
     }
+    if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
   });
 }
 
