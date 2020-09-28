@@ -366,6 +366,17 @@ const conversion = () => {
     return aInput;
   }
   
+  const getSelect = (aInput) => {
+    const regex = /^(\s*)(.*).select(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)\s(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.filter(function(num){ return num % 2 != 0 });
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.filter(function(${match[6]}) { return ${match[8]} })`)
+    }
+    return aInput;
+  }
+
   const getEndToBracket = (aInput) => {
     let myResult = new Keyword("end", "end", aInput, true);
     if (myResult.lineDoesNotContainString()) {
@@ -586,6 +597,7 @@ const conversion = () => {
       input = getForEach(input);
       input = getReduce(input);
       input = getMap(input);
+      input = getSelect(input);
       input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
