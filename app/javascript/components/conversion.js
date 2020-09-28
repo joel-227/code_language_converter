@@ -140,7 +140,7 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
   }
-  const getDestReverse = (aInput) => {
+  const getDestructiveReverse = (aInput) => {
     const regex = /^(\s*)(\w+).reverse!$/g;
     return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
   }
@@ -340,6 +340,17 @@ const conversion = () => {
       functionParamList.push(match[3]);
       blockList.push("{(")
       aInput = aInput.replace(regex, `${match[1]}${match[2]}.forEach((${match[3]}) => {`)
+    }
+    return aInput;
+  }
+
+    const getReduce = (aInput) => {
+    const regex = /^(\s*)(.*).reduce(\s*)(do|{)(\s*)\|(.*)\|(\s*)(.*)(\s*)(end|})/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[5]);
+      blockList.push("{(")
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.reduce((${match[5]}) => {`)
     }
     return aInput;
   }
@@ -562,6 +573,7 @@ const conversion = () => {
       input = getIncludeToIncludes(input);
       input = getEndToBracket(input);
       input = getForEach(input);
+      input = getReduce(input);
       input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
@@ -571,7 +583,7 @@ const conversion = () => {
       input = getOr(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
-      input = getDestReverse(input);
+      input = getDestructiveReverse(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
       output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
