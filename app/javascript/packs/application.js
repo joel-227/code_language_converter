@@ -24,6 +24,8 @@ require("packs/prism")
 
 // External imports
 import "bootstrap";
+
+import "codemirror/mode/ruby/ruby.js"
 //import Prism from 'prismjs';
 // import * from 'prismjs/themes/prism.css'
 
@@ -33,6 +35,8 @@ import "bootstrap";
 import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
+import activateConversion from "../components/conversion.js"
+import { clearForm } from '../plugins/clear_form.js';
 
 
 Prism.plugins.NormalizeWhitespace.setDefaults({
@@ -47,11 +51,14 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
   'spaces-to-tabs': 4*/
 });
 
+
+
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
-  conversion();
+  activateConversion();
   activateClipboard();
   addLike();
+  clearForm();
   Prism.highlightAll();
 });
