@@ -148,7 +148,6 @@ const conversion = () => {
     const regex = /^(\s*)\(0..(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
   }
-
   const getSample = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.sample[\(\)]*\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[2]}[Math.floor(Math.random() * ${match[2]}.length)]`);
@@ -271,9 +270,9 @@ const conversion = () => {
         }
       } else {
         aInput = aInput.replace(match[0], `${match[1]}.substring(${match[2]}, ${match[2]})`);
-      }
     }
-    const regexTwo = /(\w+)\[\s*(\d+)\s*\.\.\s*(\d*)\s*\]/g;
+  }
+  const regexTwo = /(\w+)\[\s*(\d+)\s*\.\.\s*(\d*)\s*\]/g;
     while (match = regexTwo.exec(aInput)) {
       if (parseInt(match[3], 10) >= parseInt(match[2], 10)) {
         let result = match[3].match(/\d+/g);
@@ -367,12 +366,23 @@ const conversion = () => {
   }
   
   const getSelect = (aInput) => {
-    const regex = /^(\s*)(.*).select(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)\s(}|end)/g;
+    const regex = /^(\s*)(.*).select(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)(\s*)(}|end)/g;
     let match;
     while (match = regex.exec(aInput)) {
       functionParamList.push(match[6]);
       // array.filter(function(num){ return num % 2 != 0 });
       aInput = aInput.replace(regex, `${match[1]}${match[2]}.filter(function(${match[6]}) { return ${match[8]} })`)
+    }
+    return aInput;
+  }
+
+  const getFind = (aInput) => {
+    const regex = /^(\s*)(.*).find(\s*)({|do)(\s*)\|s(.*)\|(\s*)(.*)(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.find(a => a > 2)
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.find( ${match[6]} => ${match[8]} )`)
     }
     return aInput;
   }
@@ -598,6 +608,7 @@ const conversion = () => {
       input = getReduce(input);
       input = getMap(input);
       input = getSelect(input);
+      input = getFind(input);
       input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
