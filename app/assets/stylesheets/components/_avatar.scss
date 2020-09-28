@@ -18,3 +18,16 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   border: white 1px solid;
 }
+
+.avatar-missing {
+  background-color: #d79142;
+  color: white;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.avatar-missing.dropdown-toggle::after {
+  content: none !important;
+}
