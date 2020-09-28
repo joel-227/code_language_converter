@@ -159,6 +159,10 @@ const conversion = () => {
     const regex = /^(\s*)\(0..(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
   }
+  const getBToAInclusiveArray = (aInput) => {
+    const regex = /^(\s*)\((.*)\.\.(.*)\).to_a$/g;
+    return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[3]} - ${match[2]} + 1}).map(Function.call, Number).map(function (idx) { return idx + ${match[2]}})`);
+  }
 
   const getSample = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.sample[\(\)]*\s*/g;
@@ -582,6 +586,7 @@ const conversion = () => {
       input = getOr(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
+      input = getBToAInclusiveArray(input);
       input = getDestReverse(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
