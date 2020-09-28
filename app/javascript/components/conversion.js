@@ -1,6 +1,8 @@
 import CodeMirror from "codemirror";
 import "codemirror/mode/ruby/ruby.js"
 import "codemirror/mode/javascript/javascript.js"
+import tryClipboard from '../plugins/try_clipboard.js'
+import tryClear from '../plugins/try_clear.js'
 
 const conversion = () => {
   const form = document.getElementById('form');
@@ -671,6 +673,8 @@ const activateConversion = () => {
   const form = document.getElementById('form');
   if (form) {
     conversion();
+    tryClipboard();
+    tryClear();
   }
 }
 
