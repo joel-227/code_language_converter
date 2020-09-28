@@ -151,7 +151,7 @@ const conversion = () => {
     const regex = /(\s*)(".*"|'.*'|\S*)\.to_s\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}(${match[2]}).toString()`);
   }
-  const getDestReverse = (aInput) => {
+  const getDestructiveReverse = (aInput) => {
     const regex = /^(\s*)(\w+).reverse!$/g;
     return getResult(regex, aInput, (match) => `${match[2]} = ${match[2]}.splice(0, ${match[2]}.length, ${match[2]}.reverse())`);
   }
@@ -159,7 +159,6 @@ const conversion = () => {
     const regex = /^(\s*)\(0..(.*)\).to_a$/g;
     return getResult(regex, aInput, (match) => `Array.apply(null, {length: ${match[2]} + 1}).map(Function.call, Number)`);
   }
-
   const getSample = (aInput) => {
     const regex = /(\s*)(".*"|'.*'|\S*|\[.*\])\.sample[\(\)]*\s*/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[2]}[Math.floor(Math.random() * ${match[2]}.length)]`);
@@ -282,9 +281,9 @@ const conversion = () => {
         }
       } else {
         aInput = aInput.replace(match[0], `${match[1]}.substring(${match[2]}, ${match[2]})`);
-      }
     }
-    const regexTwo = /(\w+)\[\s*(\d+)\s*\.\.\s*(\d*)\s*\]/g;
+  }
+  const regexTwo = /(\w+)\[\s*(\d+)\s*\.\.\s*(\d*)\s*\]/g;
     while (match = regexTwo.exec(aInput)) {
       if (parseInt(match[3], 10) >= parseInt(match[2], 10)) {
         let result = match[3].match(/\d+/g);
@@ -351,6 +350,50 @@ const conversion = () => {
       functionParamList.push(match[3]);
       blockList.push("{(")
       aInput = aInput.replace(regex, `${match[1]}${match[2]}.forEach((${match[3]}) => {`)
+    }
+    return aInput;
+  }
+
+  const getReduce = (aInput) => {
+    const regex = /^(\s*)(.*).reduce(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)(\s)(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.reduce((sum, current) => sum + current);
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.reduce((${match[6]}) => ${match[8]})`)
+    }
+    return aInput;
+  }
+
+  const getMap = (aInput) => {
+    const regex = /^(\s*)(.*).map(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)\s(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.map(function(item) { return item * 2 });
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.map(function(${match[6]}) { return ${match[8]} })`)
+    }
+    return aInput;
+  }
+  
+  const getSelect = (aInput) => {
+    const regex = /^(\s*)(.*).select(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)(\s*)(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.filter(function(num){ return num % 2 != 0 });
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.filter(function(${match[6]}) { return ${match[8]} })`)
+    }
+    return aInput;
+  }
+
+  const getFind = (aInput) => {
+    const regex = /^(\s*)(.*).find(\s*)({|do)(\s*)\|s(.*)\|(\s*)(.*)(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.find(a => a > 2)
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.find( ${match[6]} => ${match[8]} )`)
     }
     return aInput;
   }
@@ -573,6 +616,10 @@ const conversion = () => {
       input = getIncludeToIncludes(input);
       input = getEndToBracket(input);
       input = getForEach(input);
+      input = getReduce(input);
+      input = getMap(input);
+      input = getSelect(input);
+      input = getFind(input);
       input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
@@ -582,7 +629,7 @@ const conversion = () => {
       input = getOr(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
-      input = getDestReverse(input);
+      input = getDestructiveReverse(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
       // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
