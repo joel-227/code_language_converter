@@ -9,7 +9,7 @@
 }
  
 #output-box {
-  border: 1px solid black;
+  // border: 1px solid black;
   height: 763px;
   position: relative;
 }
@@ -49,6 +49,7 @@
   top: 20px;
   opacity: 0.5;
   font-size: 25px;
+  z-index: 2;
 }
 
 
@@ -58,6 +59,7 @@
   right: 20px;
   opacity: 0.5;
   font-size: 25px;
+  z-index: 2;
 }
 
 .clear-button:hover {
