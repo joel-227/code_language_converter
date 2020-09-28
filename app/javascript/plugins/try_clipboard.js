@@ -1,4 +1,3 @@
-
 function tryClipboard() {
   const copyButton = document.querySelector(".far.fa-copy.copy-logo.absolute");
   copyButton.addEventListener('click', copyClipboard)
@@ -15,4 +14,4 @@ async function copyClipboard() {
     }
   }
 
-export { tryClipboard as tryClipboard };
+export default tryClipboard;
