@@ -344,17 +344,17 @@ const conversion = () => {
     return aInput;
   }
 
-    const getReduce = (aInput) => {
-    const regex = /^(\s*)(.*).reduce(\s*)(do|{)(\s*)\|(.*)\|(\s*)(.*)(\s*)(end|})/g;
+  const getReduce = (aInput) => {
+    const regex = /^(\s*)(.*).reduce(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)(\s)(}|end)/g;
     let match;
     while (match = regex.exec(aInput)) {
-      functionParamList.push(match[5]);
-      blockList.push("{(")
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.reduce((${match[5]}) => {`)
+      functionParamList.push(match[6]);
+      // array.reduce((sum, current) => sum + current);
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.reduce((${match[6]}) => ${match[8]})`)
     }
     return aInput;
   }
-
+  
   const getEndToBracket = (aInput) => {
     let myResult = new Keyword("end", "end", aInput, true);
     if (myResult.lineDoesNotContainString()) {
