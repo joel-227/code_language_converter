@@ -36,3 +36,20 @@
   top: -71px;
   right: -38px;
 }
+
+#form {
+  position: relative;
+}
+
+.clear-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  opacity: 0.5;
+  font-size: 25px;
+}
+
+.clear-button:hover {
+  color: $primary;
+  cursor: pointer;
+}
