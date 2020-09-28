@@ -33,7 +33,7 @@ import "bootstrap";
 import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
-
+import { clearForm } from '../plugins/clear_form.js';
 
 Prism.plugins.NormalizeWhitespace.setDefaults({
   'remove-trailing': true,
@@ -53,5 +53,6 @@ document.addEventListener('turbolinks:load', () => {
   // conversion();
   activateClipboard();
   addLike();
+  clearForm();
   Prism.highlightAll();
 });
