@@ -18,9 +18,7 @@
       </div>
       <form action="" id="form">  
         <i class="fas fa-eraser clear-button"></i>
-        <textarea name="" id="input" class="pr-5" cols="60" rows="30" placeholder="Code here ..." spellcheck="false">
-          
-        </textarea>
+        <textarea name="" id="input" class="codemirror-textarea pr-5" cols="60" rows="30" placeholder="Code here ..." spellcheck="false"></textarea>
         <input type="submit" class='btn btn-primary' value="Convert" id="button">
       </form>
     </div>
@@ -36,7 +34,7 @@
        <i class="far fa-copy copy-logo absolute"
                  data-clipboard-target="#output-box">
                  </i>
-      <div id="output"></div>
+      <textarea id="output" class="codemirror-textarea"></textarea>
     </div>
   </div>
 </div>
