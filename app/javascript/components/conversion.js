@@ -354,6 +354,17 @@ const conversion = () => {
     }
     return aInput;
   }
+
+  const getMap = (aInput) => {
+    const regex = /^(\s*)(.*).map(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)\s(}|end)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      functionParamList.push(match[6]);
+      // array.map(function(item) { return item * 2 });
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.map(function(${match[6]}) { return ${match[8]} })`)
+    }
+    return aInput;
+  }
   
   const getEndToBracket = (aInput) => {
     let myResult = new Keyword("end", "end", aInput, true);
@@ -574,6 +585,7 @@ const conversion = () => {
       input = getEndToBracket(input);
       input = getForEach(input);
       input = getReduce(input);
+      input = getMap(input);
       input = getReturnOneLineIf(input);
       input = getIf(input);
       input = getPowertoPow(input);
