@@ -24,8 +24,6 @@ require("packs/prism")
 
 // External imports
 import "bootstrap";
-
-import "codemirror/mode/ruby/ruby.js"
 //import Prism from 'prismjs';
 // import * from 'prismjs/themes/prism.css'
 
