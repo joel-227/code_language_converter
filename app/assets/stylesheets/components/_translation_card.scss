@@ -1,10 +1,25 @@
 
 .copy-logo {
-  height: 20px;
+  font-size: 25px;
+
 }
 
+.copy-logo:hover {
+  color: $primary;
+  cursor: pointer;
+}
 .like-logo {
-  height: 25px;
+  font-size: 25px;
+  color: #000;
+}
+
+.like-logo:hover {
+  color: $primary;
+  cursor: pointer;
+}
+
+.liked {
+  color: $primary;
 }
 
 

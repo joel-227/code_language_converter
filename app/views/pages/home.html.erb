@@ -16,8 +16,11 @@
           <a class="dropdown-item" href="#"></a>
         </div>
       </div>
-      <form action="" id="form">
-        <textarea name="" id="input" cols="60" rows="30" placeholder="Code here ..." spellcheck="false" class="codemirror-textarea"></textarea>
+      <form action="" id="form">  
+        <i class="fas fa-eraser clear-button"></i>
+        <textarea name="" id="input" class="codemirror-textarea pr-5" cols="60" rows="30" placeholder="Code here ..." spellcheck="false">
+          
+        </textarea>
         <input type="submit" class='btn btn-primary' value="Convert" id="button">
       </form>
     </div>
@@ -30,6 +33,9 @@
           <a class="dropdown-item" href="#"></a>
         </div>
       </div>
+       <i class="far fa-copy copy-logo"
+                 data-clipboard-target="#output-box">
+                 </i>
       <textarea id="output" class="codemirror-textarea"></textarea>
     </div>
   </div>

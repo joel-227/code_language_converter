@@ -8,10 +8,11 @@
   margin-top: -10px;
 }
  
-// #output-box {
-//   border: 1px solid black;
-//   height: 763px;
-// }
+#output-box {
+  border: 1px solid black;
+  height: 763px;
+  position: relative;
+}
  
 #input-output-box {
   display: flex;
@@ -36,4 +37,30 @@
   position: absolute;
   top: -71px;
   right: -38px;
+}
+
+#form {
+  position: relative;
+}
+
+.copy-logo {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  opacity: 0.5;
+  font-size: 25px;
+}
+
+
+.clear-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  opacity: 0.5;
+  font-size: 25px;
+}
+
+.clear-button:hover {
+  color: $primary;
+  cursor: pointer;
 }
