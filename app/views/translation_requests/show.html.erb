@@ -17,8 +17,18 @@
         <div class="card-body">
           <div class="card-top d-flex justify-content-between align-items-center pb-2">
             <div class="card-top-right">
-              <img class="avatar" src="https://kitt.lewagon.com/placeholder/users/libsyz"
+            <% if translation.user.image_url %>
+            <img class="avatar" src= <%= translation.user.image_url %>
               alt=""> <small class="text-secondary"> <%= translation.user.email %> </small>
+            <% else %>
+            <div class="d-flex align-items-center">
+              <div class="avatar avatar-missing mr-2"> <%= translation.user.email[0].upcase %> 
+              </div>
+              <small class="text-secondary"> <%= translation.user.email %> </small>
+            </div>
+
+            <% end %>
+              
             </div>
             <div class="card-top-date">
                <small class="text-secondary"> <%= translation.created_at.strftime('%b %d, %Y') %> </small>
@@ -33,7 +43,7 @@
             <div class="reaction d-flex align-items-center">
               <i class="far fa-thumbs-up like-logo mr-2"
                        data-translation-id=<%= translation.id %>></i>
-               <p class="small"> <%= translation.likes %> likes</p>
+               <p class="small text-secondary"> <%= translation.likes %> likes</p>
             </div>
               <i class="far fa-copy copy-logo"
                  data-clipboard-target= <%= "#translation#{translation.id}"  %>>

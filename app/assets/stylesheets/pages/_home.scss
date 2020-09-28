@@ -44,7 +44,6 @@
 }
 
 .copy-logo {
-  position: absolute;
   right: 20px;
   top: 20px;
   opacity: 0.5;
@@ -52,6 +51,9 @@
   z-index: 2;
 }
 
+.absolute {
+  position: absolute;
+}
 
 .clear-button {
   position: absolute;
