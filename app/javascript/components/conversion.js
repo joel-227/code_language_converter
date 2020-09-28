@@ -1,6 +1,17 @@
+import CodeMirror from "codemirror";
+
 const conversion = () => {
   const form = document.getElementById('form');
   const output = document.getElementById('output');
+  const inputField = document.getElementById('input');
+  let inputEditor = CodeMirror.fromTextArea(inputField, {
+    lineNumbers: true
+  })
+  let outputEditor = CodeMirror.fromTextArea(output, {
+    lineNumbers: true
+  })
+
+
 
   const variableList = [];
   const functionParamList = [];
@@ -529,9 +540,9 @@ const conversion = () => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const input = document.getElementById('input').value;
-    output.innerHTML = "";
+    output.value = "";
     const lines = input.split("\n");
-    lines.forEach((input) => {
+    lines.forEach((input, index) => {
       input = getConditional(input);
       input = getFunctionCall(input);
       input = getFunctionDefinition(input);
@@ -574,7 +585,9 @@ const conversion = () => {
       input = getDestReverse(input);
       input = getNilToUndefined(input);
       input = getSemiColon(input);
-      output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
+      // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
+      index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+      outputEditor.getDoc().setValue(output.value);
     });
     variableList.length = 0;
     functionParamList.length = 0;
@@ -584,18 +597,30 @@ const conversion = () => {
     instanceVariableList.length = 0;
   });
 
+
   const testInput = document.getElementById('input');
   document.addEventListener('keyup', (event) => {
     if (event.key === "F2") {
       testInput.value = `puts "hello world"`;
+      inputEditor.getDoc().setValue(testInput.value);
     }
     if (event.key == "F4") {
       testInput.value = `numbers = [1, 2, 3, 4, 5]\nnumbers.each do |number|\n  if number % 2 == 0\n    puts "Number: #{number} is even!"\n  end\nend`;
+      inputEditor.getDoc().setValue(testInput.value);
     }
     if (event.key === "F7") {
       testInput.value = `random_number = [1, 2, 3].sample\nif random_number == 1\n  puts "one"\nelsif random_number == 2\n  puts "two"\nelse\n  puts "three"\nend`;
+      inputEditor.getDoc().setValue(testInput.value);
     }
   });
 }
 
-export default conversion
+
+const activateConversion = () => {
+  const form = document.getElementById('form');
+  if (form) {
+    conversion();
+  }
+}
+
+export default activateConversion
