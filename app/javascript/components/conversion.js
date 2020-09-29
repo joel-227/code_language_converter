@@ -125,7 +125,7 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.includes(${match[4]})`);
   }
   const getStrip = (aInput) => {
-    const regex = /^(\s*)(\"*)(\s*)(.*)(\s*)(\"*).strip$/g;
+    const regex = /^(\s*)(\"*)(\s*)(.*[^\s"])(\s*)(\"*).strip$/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
   }
   const getFirst = (aInput) => {
