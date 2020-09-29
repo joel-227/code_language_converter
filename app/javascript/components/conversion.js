@@ -771,6 +771,11 @@ const conversion = () => {
       testInput.value = `random_number = [1, 2, 3].sample\nif random_number == 1\n  puts "one"\nelsif random_number == 2\n  puts "two"\nelse\n  puts "three"\nend`;
       inputEditor.getDoc().setValue(testInput.value);
     }
+    if (event.key === "F9") {
+      testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\nputs john.pay`;
+      inputEditor.getDoc().setValue(testInput.value);
+    }
+    
     if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
   });
 }
