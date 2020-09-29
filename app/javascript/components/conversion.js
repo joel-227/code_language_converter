@@ -128,6 +128,10 @@ const conversion = () => {
     const regex = /^(\s*)(\"*)(\s*)(.*[^\s"])(\s*)(\"*).strip$/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
   }
+  const getDiv = (aInput) => {
+    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*).div(\s*)(\d*.\d*|\d*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}~~ ( ${match[2]}${match[3]} / ${match[5]} )`);
+  }
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[0]`);
@@ -637,6 +641,7 @@ const conversion = () => {
       input = getAnd(input);
       input = getOr(input);
       input = getStrip(input); 
+      input = getDiv(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
       input = getDestructiveReverse(input);
