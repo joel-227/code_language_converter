@@ -13,6 +13,9 @@ class TranslationsController < ApplicationController
     if @translation.save
       @translation.user.kudos_points += @translation.content.split(/\r\n/).count
       @translation.user.save
+      UserMailer.with(user: @translation_request.user )
+                .first_translation_email
+                .deliver_later
       flash[:notice] = "Thanks for translating, you just won #{@translation.content.split(/\r\n/).count} points"
       redirect_to translation_request_path(@translation_request)
     else
