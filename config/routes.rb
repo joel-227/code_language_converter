@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'my_requests/index'
   get 'translations/new'
   get 'sandbox', to: "pages#sandbox"
+  get 'landing', to: "pages#landing"
   devise_for :users
   root to: 'pages#home'
   resources :my_requests, only: [:index]

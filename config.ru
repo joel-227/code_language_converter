@@ -3,3 +3,10 @@
 require_relative 'config/environment'
 
 run Rails.application
+
+
+
+class Square
+  def hello
+  end
+end

@@ -33,6 +33,7 @@ import "bootstrap";
 import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
+import { typeLanding } from '../plugins/type_landing.js';
 import activateConversion from "../components/conversion.js"
 // import { clearForm } from '../plugins/clear_form.js';
 
@@ -59,6 +60,7 @@ document.addEventListener('turbolinks:load', () => {
   // tryClipboard();
   // tryClear();
   addLike();
+  typeLanding();
   // clearForm();
   Prism.highlightAll();
 });
