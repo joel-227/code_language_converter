@@ -53,13 +53,8 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
-  // initSelect2();
-  activateConversion();
   activateClipboard();
-  // tryClipboard();
-  // tryClear();
   addLike();
-  typeLanding();
-  // clearForm();
   Prism.highlightAll();
+  activateConversion();
 });

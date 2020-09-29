@@ -31,6 +31,7 @@ const conversion = () => {
   let isIfInOneLine = false;
   let isInHash = false;
   let isInClass = false;
+  let functionParamToggle = false;
 
   class Keyword {
     constructor(keyword, convertedWord, aInput, isWord) {
@@ -240,12 +241,12 @@ const conversion = () => {
     const words = aInput.match(regex);
     if (words) {
       words.forEach((word) => {
-        if (variableList.includes(word)) {
+        if (variableList.includes(word) || functionParamList.includes(word)) {
           // word = my_array
           const regexString = "(\\s*)(|[\\(\\)\\{\\}\\[\\]\\<\\>]|[\\.\\:\\;\\?]|[+-=!]|puts[\\s|\\(])(" + word + ")(\\s+|$|[\\(\\)\\{\\}\\[\\]\\<\\>]|[\\.\\:\\;\\?]|[+-=!])";
           const regexTwo = new RegExp(regexString, 'g');
           let match = regexTwo.exec(aInput);
-          if (match) {
+          if (match && !functionParamToggle) {
             let correctedWord = getCorrectConvention(match[3]);
             aInput = aInput.replace(match[3], correctedWord)
           }
@@ -583,6 +584,7 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
+    functionParamToggle = false;
     const regex = /def (\w+)\??(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
@@ -591,10 +593,21 @@ const conversion = () => {
       functionList.push(matchOne);
       blockList.push("{ func");
       if (match[2]) {
+        // match[2] = `(my_first_parameter, my_second_parameter)`
+        const regexTwo = /(\w+)/g;
+        let matchTwo;
+        while (matchTwo = regexTwo.exec(match[2])) {
+          // matchTwo[0] = `my_first_parameter`
+          functionParamList.push(matchTwo[0]);
+          let correctedMatchTwo = getCorrectConvention(matchTwo[0]);
+          functionParamList.push(correctedMatchTwo);
+        }
+        matchTwo = getCorrectConvention(match[2]);
+        functionParamToggle = true;
         if (isInClass) {
-          aInput = aInput.replace(match[0], `${matchOne} = ${match[2]} => {`);
+          aInput = aInput.replace(match[0], `${matchOne} = ${matchTwo} => {`);
         } else {
-          aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
+          aInput = aInput.replace(match[0], `const ${matchOne} = ${matchTwo} => {`);
         }
       } else {
         if (isInClass) {
@@ -786,6 +799,7 @@ const compile = () => {
   try {
     consoleOutput = eval(Opal.compile(`${input.value}`));
   } catch (err) {
+    console.log(err);
     consoleOutput = "ERROR"
   }
   return consoleOutput;
