@@ -121,8 +121,12 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[2]}.every()`);
   }
   const getIncludeToIncludes = (aInput) => {
-    const regex = /^(\s*)(.*).include\?\((.*)\)$/g;
-    return getResult(regex, aInput, (match) => `${match[2]}.includes(${match[3]})`);
+    const regex = /^(\s*)(.*).include\?(\s*)(.*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.includes(${match[4]})`);
+  }
+  const getStrip = (aInput) => {
+    const regex = /^(\s*)(\"*)(\s*)(.*)(\s*)(\"*).strip$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
   }
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
@@ -538,7 +542,7 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
-    const regex = /def (\w+)(\([^\)]*\))?/g;
+    const regex = /def (\w+)(\([^\)]*\))?(\?*)/g;
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
@@ -632,6 +636,7 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
+      input = getStrip(input); 
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
       input = getDestructiveReverse(input);
