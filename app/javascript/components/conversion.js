@@ -4,17 +4,20 @@ import "codemirror/mode/javascript/javascript.js"
 import tryClipboard from '../plugins/try_clipboard.js'
 import tryClear from '../plugins/try_clear.js'
 
+
 const conversion = () => {
   const form = document.getElementById('form');
   const output = document.getElementById('output');
   const inputField = document.getElementById('input');
   let inputEditor = CodeMirror.fromTextArea(inputField, {
     lineNumbers: true,
-    mode: "ruby"
+    mode: "ruby",
+    theme: "monokai"
   })
   let outputEditor = CodeMirror.fromTextArea(output, {
     lineNumbers: true,
-    mode: "javascript"
+    mode: "javascript",
+    theme: "monokai"
   })
 
 
@@ -499,7 +502,7 @@ const conversion = () => {
     return myResult.result();
   }
 
-  const getHashToObject = (aInput) => {    
+  const getHashToObject = (aInput) => {
     const regex = /(\s*)(\w+)\s*=\s*{/g;
     let match;
     if (match = regex.exec(aInput)) {
@@ -538,7 +541,7 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
-    const regex = /def (\w+)(\([^\)]*\))?/g;
+    const regex = /def (\w+)\??(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
@@ -587,66 +590,71 @@ const conversion = () => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const input = document.getElementById('input').value;
+    let message = compile();
     output.value = "";
-    const lines = input.split("\n");
-    lines.forEach((input, index) => {
-      input = getConditional(input);
-      input = getFunctionCall(input);
-      input = getFunctionDefinition(input);
-      input = getToUpperCase(input);
-      input = getToLowerCase(input);
-      input = getPush(input);
-      input = getSplice(input);
-      input = getEmptytoLength(input);
-      input = getInterpolation(input);
-      input = getToInt(input);
-      input = getSample(input);
-      input = getClassToTypeOf(input);
-      input = getFirst(input);
-      input = getFirstN(input);
-      input = getLastN(input);
-      input = getLast(input);
-      input = getToS(input);
-      input = getLastElement(input);
-      input = getSubString(input);
-      input = getThis(input);
-      input = getHashToObject(input);
-      input = getHashKeyValue(input);
-      input = getCallHash(input);
-      input = getVariable(input);
-      input = getVariableDefinition(input);
-      input = getPutsToConsoleLog(input);
-      input = getAllToEvery(input);
-      input = getIncludeToIncludes(input);
-      input = getEndToBracket(input);
-      input = getForEach(input);
-      input = getReduce(input);
-      input = getMap(input);
-      input = getSelect(input);
-      input = getFind(input);
-      input = getReturnOneLineIf(input);
-      input = getIf(input);
-      input = getPowertoPow(input);
-      input = getElse(input);
-      input = getElseIf(input);
-      input = getAnd(input);
-      input = getOr(input);
-      input = getZeroToNInclusiveArray(input);
-      input = getZeroToNExclusiveArray(input);
-      input = getDestructiveReverse(input);
-      input = getNilToUndefined(input);
-      input = getSemiColon(input);
-      // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-      index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
-      outputEditor.getDoc().setValue(output.value);
-    });
-    variableList.length = 0;
-    functionParamList.length = 0;
-    blockList.length = 0;
-    objectList.length = 0;
-    functionList.length = 0;
-    instanceVariableList.length = 0;
+    if (message !== "ERROR") {
+      const input = document.getElementById('input').value;
+      const lines = input.split("\n");
+      lines.forEach((input, index) => {
+        input = getConditional(input);
+        input = getFunctionCall(input);
+        input = getFunctionDefinition(input);
+        input = getToUpperCase(input);
+        input = getToLowerCase(input);
+        input = getPush(input);
+        input = getSplice(input);
+        input = getEmptytoLength(input);
+        input = getInterpolation(input);
+        input = getToInt(input);
+        input = getSample(input);
+        input = getClassToTypeOf(input);
+        input = getFirst(input);
+        input = getFirstN(input);
+        input = getLastN(input);
+        input = getLast(input);
+        input = getToS(input);
+        input = getLastElement(input);
+        input = getSubString(input);
+        input = getThis(input);
+        input = getHashToObject(input);
+        input = getHashKeyValue(input);
+        input = getCallHash(input);
+        input = getVariable(input);
+        input = getVariableDefinition(input);
+        input = getPutsToConsoleLog(input);
+        input = getAllToEvery(input);
+        input = getIncludeToIncludes(input);
+        input = getEndToBracket(input);
+        input = getForEach(input);
+        input = getReduce(input);
+        input = getMap(input);
+        input = getSelect(input);
+        input = getFind(input);
+        input = getReturnOneLineIf(input);
+        input = getIf(input);
+        input = getPowertoPow(input);
+        input = getElse(input);
+        input = getElseIf(input);
+        input = getAnd(input);
+        input = getOr(input);
+        input = getZeroToNInclusiveArray(input);
+        input = getZeroToNExclusiveArray(input);
+        input = getDestructiveReverse(input);
+        input = getNilToUndefined(input);
+        input = getSemiColon(input);
+        // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
+        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+        outputEditor.getDoc().setValue(output.value);
+      });
+      variableList.length = 0;
+      functionParamList.length = 0;
+      blockList.length = 0;
+      objectList.length = 0;
+      functionList.length = 0;
+      instanceVariableList.length = 0;
+    } else {
+      outputEditor.getDoc().setValue(`// your Ruby code has an error!`);
+    }
   });
 
 
@@ -668,6 +676,16 @@ const conversion = () => {
   });
 }
 
+const compile = () => {
+  const input = document.getElementById("input");
+  let consoleOutput;
+  try {
+    consoleOutput = eval(Opal.compile(`${input.value}`));
+  } catch (err) {
+    consoleOutput = "ERROR"
+  }
+  return consoleOutput;
+}
 
 const activateConversion = () => {
   const form = document.getElementById('form');
