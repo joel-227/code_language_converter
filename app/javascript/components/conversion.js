@@ -114,7 +114,11 @@ const conversion = () => {
     const regex = /^(\s*)puts (.*)$/g;
     return getResult(regex, aInput, (match) => `${match[1]}console.log(${match[2]})`);
   }
-
+  const getFDiv = (aInput) => {
+    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*|.*).fdiv(\s*)(\d*.\d*|\d*|.*)$/g;
+    // +15.366616161/parseFloat(35)
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}${match[3]} / parseFloat(${match[5]})`);
+  }
   const getAllToEvery = (aInput) => {
     // need to revise
     const regex = /^(\s*)(.*).all\?$/g;
@@ -129,14 +133,10 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
   }
   const getDiv = (aInput) => {
-    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*).div(\s*)(\d*.\d*|\d*)$/g;
+    const regex = /^(\s*)(\-*|\+*)(.*|\d*.\d*|\d*).div(\s*)(.*|\d*.\d*|\d*)$/g;
     return getResult(regex, aInput, (match) => `${match[1]}~~ ( ${match[2]}${match[3]} / ${match[5]} )`);
   }
-  const getFDiv = (aInput) => {
-    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*).fdiv(\s*)(\d*.\d*|\d*)$/g;
-    // +15.366616161/parseFloat(35)
-    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}${match[3]} / parseFloat(${match[5]})`);
-  }
+
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[0]`);
@@ -645,9 +645,9 @@ const conversion = () => {
       input = getElseIf(input);
       input = getAnd(input);
       input = getOr(input);
-      input = getStrip(input); 
+      input = getStrip(input);
+      input = getFDiv(input); 
       input = getDiv(input);
-      input = getFDiv(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
       input = getDestructiveReverse(input);
