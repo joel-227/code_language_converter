@@ -132,6 +132,11 @@ const conversion = () => {
     const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*).div(\s*)(\d*.\d*|\d*)$/g;
     return getResult(regex, aInput, (match) => `${match[1]}~~ ( ${match[2]}${match[3]} / ${match[5]} )`);
   }
+  const getFDiv = (aInput) => {
+    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*).fdiv(\s*)(\d*.\d*|\d*)$/g;
+    // +15.366616161/parseFloat(35)
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}${match[3]} / parseFloat(${match[5]})`);
+  }
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[0]`);
@@ -642,6 +647,7 @@ const conversion = () => {
       input = getOr(input);
       input = getStrip(input); 
       input = getDiv(input);
+      input = getFDiv(input);
       input = getZeroToNInclusiveArray(input);
       input = getZeroToNExclusiveArray(input);
       input = getDestructiveReverse(input);
