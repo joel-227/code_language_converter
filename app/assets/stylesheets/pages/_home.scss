@@ -53,12 +53,16 @@
 
 .absolute {
   position: absolute;
+  color: white;
+  right: 24px;
+  top: 8px;
 }
 
 .clear-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  color: white;
+  top: 6px;
+  right: 12px;
   opacity: 0.5;
   font-size: 25px;
   z-index: 3;
