@@ -139,8 +139,8 @@ const conversion = () => {
     return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
   }
   const getDiv = (aInput) => {
-    const regex = /^(\s*)(\-*|\+*)(.*|\d*.\d*|\d*).div(\s*)(.*|\d*.\d*|\d*)$/g;
-    return getResult(regex, aInput, (match) => `${match[1]}~~ ( ${match[2]}${match[3]} / ${match[5]} )`);
+    const regex = /^(\s*)(\-*|\+*)(.*|\d*.\d*|\d*).\bdiv\b(\s*)(.*|\d*.\d*|\d*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}~~ (${match[2]}${match[3]} / ${match[5]})`);
   }
 
   const getFirst = (aInput) => {
