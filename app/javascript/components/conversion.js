@@ -712,6 +712,15 @@ const conversion = () => {
     return aInput + ';';
   }
 
+  const ignoreComments = (aInput) => {
+    const regex = /#/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      aInput = aInput.replace(aInput, "");
+    }
+    return aInput;
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     let message = compile();
@@ -774,10 +783,18 @@ const conversion = () => {
         input = getNilToUndefined(input);
         input = getRange(input);
         input = getSemiColon(input);
+        input = ignoreComments(input);
         // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-        index === lines.length - 1 ? output.value +=  `${input}\n\n// Output:\n// ${message[0]}` : output.value +=  `${input}\n`;
+        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
         outputEditor.getDoc().setValue(output.value);
       });
+      let outputValue = outputEditor.getDoc().getValue();
+      outputValue = outputValue + `\n\n// Output:\n// ${eval(outputValue)}`;
+      outputEditor.getDoc().setValue(outputValue);
+
+      let inputValue = inputEditor.getDoc().getValue() + `\n\n# Output:\n# ${message[0]}`;
+      inputEditor.getDoc().setValue(inputValue);
+      
       variableList.length = 0;
       functionParamList.length = 0;
       blockList.length = 0;
@@ -805,7 +822,7 @@ const conversion = () => {
       inputEditor.getDoc().setValue(testInput.value);
     }
     if (event.key === "F9") {
-      testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\nputs john.pay`;
+      testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\njohn.overtime\njohn.pay`;
       inputEditor.getDoc().setValue(testInput.value);
     }
     
