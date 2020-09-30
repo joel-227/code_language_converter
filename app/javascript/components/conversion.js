@@ -31,6 +31,7 @@ const conversion = () => {
   let isIfInOneLine = false;
   let isInHash = false;
   let isInClass = false;
+  let functionParamToggle = false;
 
   class Keyword {
     constructor(keyword, convertedWord, aInput, isWord) {
@@ -119,16 +120,29 @@ const conversion = () => {
     const regex = /^(\s*)puts (.*)$/g;
     return getResult(regex, aInput, (match) => `${match[1]}console.log(${match[2]})`);
   }
-
+  const getFDiv = (aInput) => {
+    const regex = /^(\s*)(\-*|\+*)(\d*.\d*|\d*|.*).fdiv(\s*)(\d*.\d*|\d*|.*)$/g;
+    // +15.366616161/parseFloat(35)
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}${match[3]} / parseFloat(${match[5]})`);
+  }
   const getAllToEvery = (aInput) => {
     // need to revise
     const regex = /^(\s*)(.*).all\?$/g;
     return getResult(regex, aInput, (match) => `${match[2]}.every()`);
   }
   const getIncludeToIncludes = (aInput) => {
-    const regex = /^(\s*)(.*).include\?\((.*)\)$/g;
-    return getResult(regex, aInput, (match) => `${match[2]}.includes(${match[3]})`);
+    const regex = /^(\s*)(.*).include\?(\s*)(.*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.includes(${match[4]})`);
   }
+  const getStrip = (aInput) => {
+    const regex = /^(\s*)(\"*)(\s*)(.*[^\s"])(\s*)(\"*).strip$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[4]}.trim()`);
+  }
+  const getDiv = (aInput) => {
+    const regex = /^(\s*)(\-*|\+*)(.*|\d*.\d*|\d*).div(\s*)(.*|\d*.\d*|\d*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}~~ ( ${match[2]}${match[3]} / ${match[5]} )`);
+  }
+
   const getFirst = (aInput) => {
     const regex = /^(\s*)(\w+).first$/g;
     return getResult(regex, aInput, (match) => `${match[2]}[0]`);
@@ -240,12 +254,12 @@ const conversion = () => {
     const words = aInput.match(regex);
     if (words) {
       words.forEach((word) => {
-        if (variableList.includes(word)) {
+        if (variableList.includes(word) || functionParamList.includes(word)) {
           // word = my_array
           const regexString = "(\\s*)(|[\\(\\)\\{\\}\\[\\]\\<\\>]|[\\.\\:\\;\\?]|[+-=!]|puts[\\s|\\(])(" + word + ")(\\s+|$|[\\(\\)\\{\\}\\[\\]\\<\\>]|[\\.\\:\\;\\?]|[+-=!])";
           const regexTwo = new RegExp(regexString, 'g');
           let match = regexTwo.exec(aInput);
-          if (match) {
+          if (match && !functionParamToggle) {
             let correctedWord = getCorrectConvention(match[3]);
             aInput = aInput.replace(match[3], correctedWord)
           }
@@ -259,10 +273,10 @@ const conversion = () => {
 
   const getPowertoPow = (aInput) => {
     // change a ** b to Math.pow(a, b)
-    const regex = /^(\s*)(.*)(\s*)\*\*(\s*)(.*)$/g;
+    const regex = /(\S+)\s*\*\*\s*(\S+)/g;
     let match;
     while (match = regex.exec(aInput)) {
-      aInput = aInput.replace(match[0], `Math.pow(${match[2]}, ${match[5]})`);
+      aInput = aInput.replace(match[0], `Math.pow(${match[1]}, ${match[2]})`);
     }
     return aInput;
   }
@@ -583,6 +597,7 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
+    functionParamToggle = false;
     const regex = /def (\w+)\??(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
@@ -591,10 +606,21 @@ const conversion = () => {
       functionList.push(matchOne);
       blockList.push("{ func");
       if (match[2]) {
+        // match[2] = `(my_first_parameter, my_second_parameter)`
+        const regexTwo = /(\w+)/g;
+        let matchTwo;
+        while (matchTwo = regexTwo.exec(match[2])) {
+          // matchTwo[0] = `my_first_parameter`
+          functionParamList.push(matchTwo[0]);
+          let correctedMatchTwo = getCorrectConvention(matchTwo[0]);
+          functionParamList.push(correctedMatchTwo);
+        }
+        matchTwo = getCorrectConvention(match[2]);
+        functionParamToggle = true;
         if (isInClass) {
-          aInput = aInput.replace(match[0], `${matchOne} = ${match[2]} => {`);
+          aInput = aInput.replace(match[0], `${matchOne} = ${matchTwo} => {`);
         } else {
-          aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
+          aInput = aInput.replace(match[0], `const ${matchOne} = ${matchTwo} => {`);
         }
       } else {
         if (isInClass) {
@@ -613,7 +639,11 @@ const conversion = () => {
     while (match = regex.exec(aInput)) {
       if (functionList.includes(match[1])) {
         let matchOne = getCorrectConvention(match[1]);
-        aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+        if (match[2]) {
+          aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+        } else {
+          aInput = aInput.replace(match[0], `${matchOne}()`);
+        }
       }
     }
     return aInput;
@@ -686,7 +716,7 @@ const conversion = () => {
     event.preventDefault();
     let message = compile();
     output.value = "";
-    if (message !== "ERROR") {
+    if (message[0] !== "ERROR") {
       const input = document.getElementById('input').value;
       const lines = input.split("\n");
       lines.forEach((input, index) => {
@@ -735,6 +765,9 @@ const conversion = () => {
         input = getElseIf(input);
         input = getAnd(input);
         input = getOr(input);
+        input = getStrip(input);
+        input = getFDiv(input);
+        input = getDiv(input);
         input = getZeroToNInclusiveArray(input);
         input = getZeroToNExclusiveArray(input);
         input = getDestructiveReverse(input);
@@ -742,7 +775,7 @@ const conversion = () => {
         input = getRange(input);
         input = getSemiColon(input);
         // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+        index === lines.length - 1 ? output.value +=  `${input}\n\n// Output:\n// ${message[0]}` : output.value +=  `${input}\n`;
         outputEditor.getDoc().setValue(output.value);
       });
       variableList.length = 0;
@@ -752,7 +785,7 @@ const conversion = () => {
       functionList.length = 0;
       instanceVariableList.length = 0;
     } else {
-      outputEditor.getDoc().setValue(`// Ruby Error or feature not supported!`);
+      outputEditor.getDoc().setValue(`// ${message[1]}`);
     }
   });
 
@@ -783,12 +816,14 @@ const conversion = () => {
 const compile = () => {
   const input = document.getElementById("input");
   let consoleOutput;
+  let errorMessage;
   try {
     consoleOutput = eval(Opal.compile(`${input.value}`));
   } catch (err) {
+    errorMessage = err.message
     consoleOutput = "ERROR"
   }
-  return consoleOutput;
+  return [consoleOutput, errorMessage]
 }
 
 const activateConversion = () => {

@@ -5,13 +5,14 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <link rel="shortcut icon" href="code_converter_logo.ico"/>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css">
+  <script src="https://cdn.opalrb.com/opal/current/opal.js"></script>
+  <script src="https://cdn.opalrb.com/opal/current/opal-parser.js" onload="Opal.load('opal-parser')"></script> 
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_link_tag 'prism', media: 'all' %>
-
-  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: false %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
 </head>
 
 <body>
@@ -21,7 +22,6 @@
   <%= yield %>
   <%= render 'shared/footer' %>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
-<script src="https://cdn.opalrb.com/opal/current/opal.js" onload="Opal.load('opal')"></script>
-<script src="https://cdn.opalrb.com/opal/current/opal-parser.js" onload="Opal.load('opal-parser')"></script>
+
 </body>
 </html>
