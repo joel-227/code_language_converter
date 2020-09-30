@@ -36,6 +36,7 @@ import { activateClipboard } from '../plugins/activate_clipboard.js';
 import { typeLanding } from '../plugins/type_landing.js';
 import activateConversion from "../components/conversion.js"
 // import { clearForm } from '../plugins/clear_form.js';
+import codemirrorTranslationRequests from "../components/translation_request_codemirror"
 
 
 Prism.plugins.NormalizeWhitespace.setDefaults({
@@ -57,4 +58,5 @@ document.addEventListener('turbolinks:load', () => {
   addLike();
   Prism.highlightAll();
   activateConversion();
+  codemirrorTranslationRequests();
 });
