@@ -4,6 +4,11 @@
   <div class="row">
     <div class="col-6">
        <h3> Original </h3>
+       <div class="bg-code radius-top px-3 pt-2">
+                <small class= <%= text_class(@translation_request.original_language) %> > <%= @translation_request.original_language.upcase %> </small>
+                <i class="fas fa-arrow-right text-light small"></i>
+                <small class= <%= text_class(@translation_request.converted_language) %>> <%= @translation_request.converted_language.upcase %> </small>
+            </div>
        <pre class="mt-0 translation-post-request">
          <code class= <%= request_highlight(@translation_request) %>>
             <%= @translation_request.content %>
@@ -13,7 +18,7 @@
     <div class="col-6">
       <h3> <%=  pluralize(@translation_request.translations.count, "Translation") %> </h3>
       <% @translation_request.translations.each do |translation| %>
-      <div class="card">
+      <div class="card card-shadow mt-4">
         <div class="card-body">
           <div class="card-top d-flex justify-content-between align-items-center pb-2">
             <div class="card-top-right">

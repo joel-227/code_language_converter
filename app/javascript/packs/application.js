@@ -34,7 +34,8 @@ import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
 import { typeLanding } from '../plugins/type_landing.js';
-import activateConversion from "../components/conversion.js"
+import activateConversion from "../components/conversion.js";
+import { translate } from '../plugins/translate.js';
 // import { clearForm } from '../plugins/clear_form.js';
 import codemirrorTranslationRequests from "../components/translation_request_codemirror"
 
@@ -56,7 +57,9 @@ document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   activateClipboard();
   addLike();
-  Prism.highlightAll();
+  typeLanding();
+  translate();
   activateConversion();
+  Prism.highlightAll();
   codemirrorTranslationRequests();
 });

@@ -8,32 +8,40 @@
 <div class="container">
   <div class="row" id="input-output-box">
     <div class="col-6" id="input-box">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position: absolute; left: 40%; bottom: 34px; ">
-          Ruby
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#"></a>
-        </div>
+     
+      <form action="" id="form" class="form-converter">
+        <div class="w-100 d-flex justify-content-between align-items-center px-3 pt-3">
+          <small class="text-ruby translator-offset">RUBY</small>
+          <div>
+            <div class="submit-wrapper btn btn-primary btn-convert mr-3">
+             <small> 
+             <i class="fas fa-exchange-alt mr-1"></i>
+             CONVERT </small>
+            </div>
+
+            <small class="text-light clear-button "> 
+              <i class="fas fa-eraser mr-1"></i> 
+              CLEAR
+            </small>
+          </div>
       </div>
-      <form action="" id="form">
-        <i class="fas fa-eraser clear-button"></i>
+      
         <textarea name="" id="input" class="codemirror-textarea pr-5" cols="60" rows="30" placeholder="Code here ..." spellcheck="false"></textarea>
-        <input type="submit" class='btn btn-primary' value="Convert" id="button">
+        
       </form>
     </div>
     <div class="col-6" id="output-box">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position: absolute; right: 30%; bottom: 34px; ">
-          JavaScript
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#"></a>
-        </div>
-      </div>
-       <i class="far fa-copy copy-logo absolute">
+
+      <div class="w-100 d-flex justify-content-between align-items-center px-3 pt-3 bg-code radius-top">
+       <small class="text-javascript translator-offset">JAVASCRIPT</small>
+       <small class="text-light mr-5 translator-offset copy-logo"> 
+       
+       <i class="far fa-copy mr-1">
                  </i>
-      <textarea id="output" class="codemirror-textarea"></textarea>
+       COPY 
+      </small>
+       </div>
+      <textarea id="output" class="codemirror-textarea form-converter"></textarea>
     </div>
   </div>
 </div>

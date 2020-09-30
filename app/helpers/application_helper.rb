@@ -6,4 +6,8 @@ module ApplicationHelper
   def translation_highlight(request)
     "language-#{request.language}"
   end
+
+  def text_class(language)
+    "text-#{language.downcase}"
+  end
 end
