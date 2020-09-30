@@ -4,17 +4,20 @@ import "codemirror/mode/javascript/javascript.js"
 import tryClipboard from '../plugins/try_clipboard.js'
 import tryClear from '../plugins/try_clear.js'
 
+
 const conversion = () => {
   const form = document.getElementById('form');
   const output = document.getElementById('output');
   const inputField = document.getElementById('input');
   let inputEditor = CodeMirror.fromTextArea(inputField, {
     lineNumbers: true,
-    mode: "ruby"
+    mode: "ruby",
+    theme: "monokai"
   })
   let outputEditor = CodeMirror.fromTextArea(output, {
     lineNumbers: true,
-    mode: "javascript"
+    mode: "javascript",
+    theme: "monokai"
   })
 
 
@@ -24,8 +27,10 @@ const conversion = () => {
   const objectList = [];
   const functionList = [];
   const instanceVariableList = [];
+  const classList = [];
   let isIfInOneLine = false;
   let isInHash = false;
+  let isInClass = false;
 
   class Keyword {
     constructor(keyword, convertedWord, aInput, isWord) {
@@ -362,12 +367,12 @@ const conversion = () => {
   }
 
   const getForEach = (aInput) => {
-    const regex = /(\s*)(\w+).each do \|(\w+)\|/g;
+    const regex = /\.each do \|(\w+)\|/g;
     let match;
     while (match = regex.exec(aInput)) {
-      functionParamList.push(match[3]);
+      functionParamList.push(match[1]);
       blockList.push("{(")
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.forEach((${match[3]}) => {`)
+      aInput = aInput.replace(regex, `.forEach((${match[1]}) => {`)
     }
     return aInput;
   }
@@ -389,7 +394,7 @@ const conversion = () => {
     while (match = regex.exec(aInput)) {
       functionParamList.push(match[6]);
       // array.map(function(item) { return item * 2 });
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.map(function(${match[6]}) { return ${match[8]} })`)
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.map((${match[6]}) => ${match[8]})`)
     }
     return aInput;
   }
@@ -400,18 +405,18 @@ const conversion = () => {
     while (match = regex.exec(aInput)) {
       functionParamList.push(match[6]);
       // array.filter(function(num){ return num % 2 != 0 });
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.filter(function(${match[6]}) { return ${match[8]} })`)
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.filter((${match[6]}) => ${match[8]})`)
     }
     return aInput;
   }
 
   const getFind = (aInput) => {
-    const regex = /^(\s*)(.*).find(\s*)({|do)(\s*)\|s(.*)\|(\s*)(.*)(}|end)/g;
+    const regex = /^(\s*)(.*).find(\s*)({|do)(\s*)\|(.*)\|(\s*)(.*)(}|end)/g;
     let match;
     while (match = regex.exec(aInput)) {
       functionParamList.push(match[6]);
       // array.find(a => a > 2)
-      aInput = aInput.replace(regex, `${match[1]}${match[2]}.find( ${match[6]} => ${match[8]} )`)
+      aInput = aInput.replace(regex, `${match[1]}${match[2]}.find( ${match[6]} => ${match[8]})`)
     }
     return aInput;
   }
@@ -419,13 +424,37 @@ const conversion = () => {
   const getEndToBracket = (aInput) => {
     let myResult = new Keyword("end", "end", aInput, true);
     if (myResult.lineDoesNotContainString()) {
-      const regex = /(\s*)end/g;
+      const regex = /(\s*)\bend\b/g;
       let match;
       while (match = regex.exec(aInput)) {
-        if (blockList[blockList.length - 1] == "{(") {
+        if (blockList[blockList.length - 1] === "{(") {
           aInput = aInput.replace(regex, `${match[1]}})`);
         } else {
           aInput = aInput.replace(regex, `${match[1]}}`);
+          if (blockList[blockList.length - 1] === "{ class") {
+            isInClass = false;
+          }
+          // if (blockList[blockList.length - 1] === "{ func") {
+          //   // function has ended
+          //   let prevLine = lines[index - 1];            
+          //   prevLine = prevLine.trim();
+          //   if (!isInHash) {
+          //     if (!(['{', '}', ','].includes(prevLine[prevLine.length - 1]) || aInput.length === 0)) {
+          //       prevLine = prevLine + ';';
+          //     }
+          //   }
+          //   console.log(`prevLine is: `, prevLine);
+          //   if (prevLine[prevLine.length - 1] === `;`) {
+          //     // latest expression  
+          //     // prevLine is:  x*x;
+          //     const implicitRegex = /(\s*)(.*)/g;
+          //     let implicitMatch;
+          //     if (implicitMatch = implicitRegex.exec(prevLine)) {
+          //       prevLine = prevLine.replace(implicitMatch[2], `return ${implicitMatch[2]}`);
+          //       lines[index - 1]
+          //     }
+          //   }
+          // }
         }
         blockList.pop();
       }
@@ -434,6 +463,22 @@ const conversion = () => {
       return myResult.result();
     }
 
+  }
+
+  const getRange = (aInput) => {
+    const regex = /\((\d+)\.\.(\d+)\)/g;
+    const regexTwo = /\((\d+)\.\.\.(\d+)\)/g;
+    let match;
+    let matchTwo;
+    if (match = regex.exec(aInput)) {
+      aInput = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i <= b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n` 
+      + aInput.replace(match[0], `range(${match[1]}, ${match[2]})`);
+    }
+    if (matchTwo = regexTwo.exec(aInput)) {
+      aInput = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i < b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n`
+        + aInput.replace(matchTwo[0], `range(${matchTwo[1]}, ${matchTwo[2]})`);
+    }
+    return aInput;
   }
 
   const getReturnOneLineIf = (aInput) => {
@@ -512,7 +557,7 @@ const conversion = () => {
     return myResult.result();
   }
 
-  const getHashToObject = (aInput) => {    
+  const getHashToObject = (aInput) => {
     const regex = /(\s*)(\w+)\s*=\s*{/g;
     let match;
     if (match = regex.exec(aInput)) {
@@ -551,17 +596,25 @@ const conversion = () => {
 
   const getFunctionDefinition = (aInput) => {
     // fix implicit return
-    const regex = /def (\w+)(\([^\)]*\))?(\?*)/g;
+    const regex = /def (\w+)\??(\([^\)]*\))?/g;
     let match;
     if (match = regex.exec(aInput)) {
       functionList.push(match[1]);
       let matchOne = getCorrectConvention(match[1]);
       functionList.push(matchOne);
-      blockList.push("{");
+      blockList.push("{ func");
       if (match[2]) {
-        aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
+        if (isInClass) {
+          aInput = aInput.replace(match[0], `${matchOne} = ${match[2]} => {`);
+        } else {
+          aInput = aInput.replace(match[0], `const ${matchOne} = ${match[2]} => {`);
+        }
       } else {
-        aInput = aInput.replace(match[0], `const ${matchOne} = () => {`);
+        if (isInClass) {
+          aInput = aInput.replace(match[0], `${matchOne} = () => {`);
+        } else {
+          aInput = aInput.replace(match[0], `const ${matchOne} = () => {`);
+        }
       }
     }
     return aInput;
@@ -589,6 +642,50 @@ const conversion = () => {
     return aInput;
   }
 
+  const getClassDefinition = (aInput) => {
+    const regex = /class (\w+)(\s*)(<)*(\s*)(\w*)/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      if (match[3] === "<") {
+        aInput = aInput.replace(match[3], `extends`);
+      }
+      classList.push(match[1]);
+      blockList.push("{ class");
+      isInClass = true;
+      aInput = aInput + ` {`;
+    }
+    return aInput;
+  }
+
+  const getClassConstructor = (aInput) => {
+    const regex = /(def initialize)(\([^\)]*\))*/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[1], `constructor`);
+      blockList.push("{");
+      aInput += ` {`;
+    }
+    return aInput;
+  }
+
+  const ignoreClassPublicPrivate = (aInput) => {
+    const regex = /attr_accessor|attr_reader|attr_writer/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      aInput = "";
+    }
+    return aInput;
+  }
+
+  const getInstanceCall = (aInput) => {
+    const regex = /(\w+)\.new/g;
+    let match;
+    if (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], `new ${match[1]}`);
+    }
+    return aInput
+  }
+
   const getSemiColon = (aInput) => {
     let tempInput = aInput.trim();
     if (isInHash) return aInput;
@@ -600,69 +697,79 @@ const conversion = () => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const input = document.getElementById('input').value;
+    let message = compile();
     output.value = "";
-    const lines = input.split("\n");
-    lines.forEach((input, index) => {
-      input = getConditional(input);
-      input = getFunctionCall(input);
-      input = getFunctionDefinition(input);
-      input = getToUpperCase(input);
-      input = getToLowerCase(input);
-      input = getPush(input);
-      input = getSplice(input);
-      input = getEmptytoLength(input);
-      input = getInterpolation(input);
-      input = getToInt(input);
-      input = getSample(input);
-      input = getClassToTypeOf(input);
-      input = getFirst(input);
-      input = getFirstN(input);
-      input = getLastN(input);
-      input = getLast(input);
-      input = getToS(input);
-      input = getLastElement(input);
-      input = getSubString(input);
-      input = getThis(input);
-      input = getHashToObject(input);
-      input = getHashKeyValue(input);
-      input = getCallHash(input);
-      input = getVariable(input);
-      input = getVariableDefinition(input);
-      input = getPutsToConsoleLog(input);
-      input = getAllToEvery(input);
-      input = getIncludeToIncludes(input);
-      input = getEndToBracket(input);
-      input = getForEach(input);
-      input = getReduce(input);
-      input = getMap(input);
-      input = getSelect(input);
-      input = getFind(input);
-      input = getReturnOneLineIf(input);
-      input = getIf(input);
-      input = getPowertoPow(input);
-      input = getElse(input);
-      input = getElseIf(input);
-      input = getAnd(input);
-      input = getOr(input);
-      input = getStrip(input);
-      input = getFDiv(input); 
-      input = getDiv(input);
-      input = getZeroToNInclusiveArray(input);
-      input = getZeroToNExclusiveArray(input);
-      input = getDestructiveReverse(input);
-      input = getNilToUndefined(input);
-      input = getSemiColon(input);
-      // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-      index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
-      outputEditor.getDoc().setValue(output.value);
-    });
-    variableList.length = 0;
-    functionParamList.length = 0;
-    blockList.length = 0;
-    objectList.length = 0;
-    functionList.length = 0;
-    instanceVariableList.length = 0;
+    if (message !== "ERROR") {
+      const input = document.getElementById('input').value;
+      const lines = input.split("\n");
+      lines.forEach((input, index) => {
+        input = getClassDefinition(input);
+        input = ignoreClassPublicPrivate(input);
+        input = getClassConstructor(input);
+        input = getInstanceCall(input);
+        input = getConditional(input);
+        input = getFunctionCall(input);
+        input = getFunctionDefinition(input);
+        input = getToUpperCase(input);
+        input = getToLowerCase(input);
+        input = getPush(input);
+        input = getSplice(input);
+        input = getEmptytoLength(input);
+        input = getInterpolation(input);
+        input = getToInt(input);
+        input = getSample(input);
+        input = getClassToTypeOf(input);
+        input = getFirst(input);
+        input = getFirstN(input);
+        input = getLastN(input);
+        input = getLast(input);
+        input = getToS(input);
+        input = getLastElement(input);
+        input = getSubString(input);
+        input = getThis(input);
+        input = getHashToObject(input);
+        input = getHashKeyValue(input);
+        input = getCallHash(input);
+        input = getVariable(input);
+        input = getVariableDefinition(input);
+        input = getPutsToConsoleLog(input);
+        input = getAllToEvery(input);
+        input = getIncludeToIncludes(input);
+        input = getEndToBracket(input);
+        input = getForEach(input);
+        input = getReduce(input);
+        input = getMap(input);
+        input = getSelect(input);
+        input = getFind(input);
+        input = getReturnOneLineIf(input);
+        input = getIf(input);
+        input = getPowertoPow(input);
+        input = getElse(input);
+        input = getElseIf(input);
+        input = getAnd(input);
+        input = getOr(input);
+        input = getStrip(input);
+        input = getFDiv(input);
+        input = getDiv(input);
+        input = getZeroToNInclusiveArray(input);
+        input = getZeroToNExclusiveArray(input);
+        input = getDestructiveReverse(input);
+        input = getNilToUndefined(input);
+        input = getRange(input);
+        input = getSemiColon(input);
+        // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
+        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+        outputEditor.getDoc().setValue(output.value);
+      });
+      variableList.length = 0;
+      functionParamList.length = 0;
+      blockList.length = 0;
+      objectList.length = 0;
+      functionList.length = 0;
+      instanceVariableList.length = 0;
+    } else {
+      outputEditor.getDoc().setValue(`// Ruby Error or feature not supported!`);
+    }
   });
 
 
@@ -680,10 +787,25 @@ const conversion = () => {
       testInput.value = `random_number = [1, 2, 3].sample\nif random_number == 1\n  puts "one"\nelsif random_number == 2\n  puts "two"\nelse\n  puts "three"\nend`;
       inputEditor.getDoc().setValue(testInput.value);
     }
+    if (event.key === "F9") {
+      testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\nputs john.pay`;
+      inputEditor.getDoc().setValue(testInput.value);
+    }
+    
     if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
   });
 }
 
+const compile = () => {
+  const input = document.getElementById("input");
+  let consoleOutput;
+  try {
+    consoleOutput = eval(Opal.compile(`${input.value}`));
+  } catch (err) {
+    consoleOutput = "ERROR"
+  }
+  return consoleOutput;
+}
 
 const activateConversion = () => {
   const form = document.getElementById('form');

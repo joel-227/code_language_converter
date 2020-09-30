@@ -1,0 +1,88 @@
+
+.landing-illustration {
+  position: relative;
+}
+
+.landing-code-background {
+  height: 646px;
+  width: 505px;
+  background: linear-gradient(180deg, #A16E6E 0%, rgba(255, 187, 187, 0) 100%);
+  border-radius: 16px;
+}
+
+.landing-code {
+  padding: 0px 30px;
+  position: absolute;
+  width: 474px;
+  height: 267px;
+  background: #1D1F23;
+  border-radius: 16px;
+}
+
+.ruby {
+  top: -40px;
+  left: -40px;
+}
+
+.javascript {
+  top: 260px;
+  left: 80px;
+}
+
+.ruby-code.class  {
+  color: #fff
+}
+
+.ruby-code.keyword {
+  color: #66d9ef ;
+}
+
+.ruby-code.operator {
+  color: #f92672 ;
+}
+
+.ruby-code.method {
+  color: #a6e22e
+}
+
+.text-javascript {
+  color: #FDF07B;
+}
+
+.text-ruby {
+color: #FB9595;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+
+.card-landing {
+  min-height: 350px;
+  border: 1px solid #5A0001;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  position: relative;
+}
+
+.card-landing-logo {
+  font-size: 36px;
+  opacity: 0.5;
+  color: $nav-color;
+}
+
+.card-landing-cta {
+  position: absolute;
+  bottom: 20px;
+  left: 2rem;
+}
+
+
+
+.ruby-typed,
+.js-typed {
+  font-family: 'Source Code Pro';
+  white-space: pre;
+}
+

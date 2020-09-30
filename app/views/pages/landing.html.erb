@@ -1,0 +1,81 @@
+
+<div class="container pt-5">
+  <div class="row py-5">
+      <div class="col-6">
+        <h3 class="trial"> </h3>
+        <h1 class="pb-3 bold">
+          &lt;CodeConverter/&gt;
+        </h1>
+        <h1 class="pb-3 bold">
+          Where Rubyists come to learn JavaScript
+        </h1>
+        <p class="pb-5 w-75">
+         CodeConverter is a platform designed to help Rubyists pick up JavaScript as fast as possible. We translate Ruby code on-the-fly and our members can get their Ruby or JavaScript code translated by our savvy community of coders.
+       </p>
+       <%= link_to("Convert Your Code Now", home_path, class: "btn btn-primary rounded-pill py-3 px-5")%>
+     </div>
+     <div class="col-6">
+      <div class="landing-illustration">
+        <div class="landing-code-background"></div>
+        <div class="landing-code ruby">
+          <div class="d-flex justify-content-between py-3">
+            <p class="text-ruby">RUBY</p>
+            <i class="fas fa-chevron-down text-light"></i>
+          </div>
+          <div class="text-left text-light">
+            <span class="ruby-typed">
+<!-- <class class="ruby-code keyword">class</class> <span class="ruby-code class">Square</span>
+  <span class="ruby-code keyword">def</span> <span class="ruby-code method">get_area</span>(size)
+    size <span class="ruby-code operator">* </span>size
+  <span class="ruby-code keyword">end</span>
+<span class="ruby-code keyword">end</span> -->
+            </span>
+          </div>
+        </div>
+        <div class="landing-code javascript">
+          <div class="d-flex justify-content-between py-3">
+            <p class="text-javascript">JAVASCRIPT</p>
+            <i class="fas fa-chevron-down text-light"></i>
+          </div>
+          <div class="text-left text-light">
+            <span class="js-typed">
+<!-- <class class="ruby-code keyword">class</class> <span class="ruby-code class">Square { </span>
+  <span class="ruby-code keyword">function</span> <span class="ruby-code method">getArea</span>(size) {
+    return size <span class="ruby-code operator">* </span>size
+  }
+ } -->
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <div class="card-landing pt-3 px-4">
+        <i class="fas fa-terminal card-landing-logo"></i>
+        <h3 class="py-3"> Get Translated </h3>
+        <p class="pb-4"> CodeConverter is a platform designed to help Rubyists pick up JavaScript as fast as possible. </p>
+        <%= link_to("Try our converter", home_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card-landing pt-3 px-4">
+        <i class="fas fa-hands-helping card-landing-logo"></i>
+        <h3 class="py-3"> Get Support </h3>
+        <p class="pb-4"> The code you need is complex or ambiguous? No problem! Ask our community of code ninjas.</p>
+        <%= link_to("Request a Translation", new_translation_request_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
+      </div>``
+    </div>
+    <div class="col-4">
+      <div class="card-landing pt-3 px-4">
+        <i class="fas fa-user-friends card-landing-logo"></i>
+        <h3 class="py-3"> Get Involved </h3>
+        <p class="pb-4"> Skilled in Ruby and JavaScript? Join our community of translators. Earn experience and get recognized in the industry</p>
+         <%= link_to("Translate a Snippet", translation_requests_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
+      </div>
+    </div>
+  </div>
+</div>
+\
