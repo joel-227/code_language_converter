@@ -366,6 +366,15 @@ const conversion = () => {
     const regex = /(\s*)(\w+)\.delete_at\(\s*(\d+)\s*\)/g;
     return getResult(regex, aInput, (match) => `${match[1]}${match[2]}.splice(${match[3]}, 1)`);
   }
+  
+  const getEven = (aInput) => {
+    const regex = /^^(\s*)(.*).even\?(.*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]} % 2 === 0)`);
+  }
+  const getOdd = (aInput) => {
+    const regex = /^^(\s*)(.*).odd\?(.*)$/g;
+    return getResult(regex, aInput, (match) => `${match[1]}${match[2]} % 2 != 0)`);
+  }
 
   const getForEach = (aInput) => {
     const regex = /\.each do \|(\w+)\|/g;
@@ -777,6 +786,8 @@ const conversion = () => {
         input = getStrip(input);
         input = getFDiv(input);
         input = getDiv(input);
+        input = getEven(input);
+        input = getOdd(input);
         input = getZeroToNInclusiveArray(input);
         input = getZeroToNExclusiveArray(input);
         input = getDestructiveReverse(input);
