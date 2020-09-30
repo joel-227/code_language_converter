@@ -1,5 +1,5 @@
 function tryClear() {
-  const clearButton = document.querySelector(".fas.fa-eraser.clear-button");
+  const clearButton = document.querySelector(".clear-button");
   clearButton.addEventListener('click', clear)
 }
 

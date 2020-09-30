@@ -7,13 +7,13 @@
 #navigation-box {
   margin-top: -10px;
 }
- 
+
 #output-box {
   // border: 1px solid black;
   height: 763px;
   position: relative;
 }
- 
+
 #input-output-box {
   display: flex;
   justify-content: space-between;
@@ -26,49 +26,56 @@
 }
 
 // #input {
-//   width: 100%;
-// }
+  //   width: 100%;
+  // }
+  
+  // #output p {
+    //   white-space: pre-wrap;
+    // }
 
-// #output p {
-//   white-space: pre-wrap;
-// }
+    
+    .btn-convert {
+      text-transform: uppercase;
+      font-size: 12px;
+      background-color: transparent;
+      border: solid 1px white;
+      border-radius: 5px;
+    }
+    
+    #form {
+      position: relative;
+    }
+    
+    .form-converter {
+      background-color: #272822;
+      padding-right: 40px;
+    }
+    
+    .copy-logo {
+      right: 20px;
+      top: 20px;
+      opacity: 0.5;
+      font-size: 25px;
+      z-index: 3;
+    }
+    
+    .absolute {
+      position: absolute;
+      color: white;
+      right: 24px;
+      top: 8px;
+    }
 
-#button {
-  position: absolute;
-  top: -71px;
-  right: -38px;
-}
-
-#form {
-  position: relative;
-}
-
-.copy-logo {
-  right: 20px;
-  top: 20px;
-  opacity: 0.5;
-  font-size: 25px;
-  z-index: 3;
-}
-
-.absolute {
-  position: absolute;
-  color: white;
-  right: 24px;
-  top: 8px;
-}
-
-.clear-button {
-  position: absolute;
-  color: white;
-  top: 6px;
-  right: 12px;
-  opacity: 0.5;
-  font-size: 25px;
-  z-index: 3;
-}
-
-.clear-button:hover {
-  color: $primary;
-  cursor: pointer;
-}
+    .clear-button {
+      color: white;
+      top: 6px;
+      right: 12px;
+      opacity: 0.5;
+      z-index: 3;
+    }
+    
+    .clear-button:hover {
+      color: $primary;
+      cursor: pointer;
+    }
+    

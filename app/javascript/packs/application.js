@@ -34,7 +34,8 @@ import conversion  from '../components/conversion.js';
 import { addLike } from '../plugins/add_like.js';
 import { activateClipboard } from '../plugins/activate_clipboard.js';
 import { typeLanding } from '../plugins/type_landing.js';
-import activateConversion from "../components/conversion.js"
+import activateConversion from "../components/conversion.js";
+import { translate } from '../plugins/translate.js';
 // import { clearForm } from '../plugins/clear_form.js';
 
 
@@ -54,12 +55,14 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 document.addEventListener('turbolinks:load', () => {
   // Call your functions here, e.g:
   // initSelect2();
-  activateConversion();
+
   activateClipboard();
   // tryClipboard();
   // tryClear();
   addLike();
-  typeLanding();
+  // typeLanding();
+  translate();
+  activateConversion();
   // clearForm();
   Prism.highlightAll();
 });
