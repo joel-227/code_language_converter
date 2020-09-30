@@ -9,7 +9,12 @@ const typeLanding  = () => {
             ],
   typeSpeed: 40,
   }
-  new Typed('.ruby-typed', rubyOptions)
+  try {
+    new Typed('.ruby-typed', rubyOptions)
+  } catch(error) {
+    console.warn("Type JS Not Loaded - See type_landing.js for details");
+  }
+  
 
 
   let jsOptions = {
@@ -19,7 +24,12 @@ const typeLanding  = () => {
   typeSpeed: 40,
   }
 
-  new Typed('.js-typed', jsOptions)
+  try {
+    new Typed('.js-typed', jsOptions)
+  } catch(error) {
+    console.warn("Type JS Not Loaded - See type_landing.js for details");
+  }
+  
 }
 
 

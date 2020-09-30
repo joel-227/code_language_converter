@@ -60,7 +60,7 @@ document.addEventListener('turbolinks:load', () => {
   // tryClipboard();
   // tryClear();
   addLike();
-  // typeLanding();
+  typeLanding();
   translate();
   activateConversion();
   // clearForm();

@@ -1,7 +1,13 @@
 
 <div class="profile-info d-flex justify-content-around align-items-center py-4">
   <div class="profile-edit">
-    <img class="avatar-large pb-2" src="https://kitt.lewagon.com/placeholder/users/ssaunier" alt="">
+    <% if current_user.image_url %> 
+      <img class="avatar-large pb-2" src= <%= current_user.image_url %> alt="">
+    <% else %>
+      <div class="avatar-missing avatar dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+            <%=  current_user.email[0].upcase  %>
+        </div>
+    <% end %>
     <p class="text-secondary pb-2"> Joined at <%= current_user.created_at.strftime('%b %d, %Y') %> </p>
     <a class="btn-sm btn-primary"> Edit Your Profile </a>
   </div>
@@ -10,7 +16,7 @@
     <p class="text-secondary"> <%= pluralize(current_user.kudos_points, "kudos point")%>  </p>
   </div>
   <div class="profile-translation-info">
-    <p> 🗒 <%= pluralize(current_user.translation_requests.count, "translation request") + " submitted" %>  </p>
-    <p>🔏 <%= pluralize(current_user.translations.count, "translation") + " submitted" %> </p>
+    <p> <i class="fas fa-marker icon-profile"></i> <%= pluralize(current_user.translation_requests.count, "translation request") + " submitted" %>  </p>
+    <p> <i class="far fa-paper-plane icon-profile"></i> <%= pluralize(current_user.translations.count, "translation") + " submitted" %> </p>
   </div>
 </div>

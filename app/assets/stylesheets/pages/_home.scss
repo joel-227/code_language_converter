@@ -44,6 +44,7 @@
     
     #form {
       position: relative;
+      border-radius: 12px;
     }
     
     .form-converter {
@@ -51,13 +52,13 @@
       padding-right: 40px;
     }
     
-    .copy-logo {
-      right: 20px;
-      top: 20px;
-      opacity: 0.5;
-      font-size: 25px;
-      z-index: 3;
-    }
+    // .copy-logo {
+    //   right: 20px;
+    //   top: 20px;
+    //   opacity: 0.5;
+    //   font-size: 12px;
+    //   z-index: 3;
+    // }
     
     .absolute {
       position: absolute;
@@ -79,3 +80,15 @@
       cursor: pointer;
     }
     
+    .bg-code {
+      background-color: #272822; 
+    }
+
+
+    .translator-offset {
+      padding-top: 6px;
+    }
+
+    .radius-top {
+      border-radius: 16px 16px 0px 0px;
+    }
