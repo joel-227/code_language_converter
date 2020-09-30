@@ -11,8 +11,8 @@ const codemirrorTranslationRequests = () => {
       mode: "ruby",
       theme: "monokai"
     })
-    const styleForm = document.querySelector('.CodeMirror.cm-s-monokai')
-    styleForm.classList.add('codemirror-translation-request-form')
+    const styleForm = document.querySelector('.CodeMirror.cm-s-monokai');
+    styleForm.classList.add('codemirror-translation-request-form');
   }
 
   const contentForm = document.getElementById('translation_content');
@@ -22,8 +22,8 @@ const codemirrorTranslationRequests = () => {
       mode: "javascript",
       theme: "monokai"
     })
-    const styleForm = document.querySelector('.CodeMirror.cm-s-monokai')
-    styleForm.classList.add('codemirror-translation-request-form')
+    const styleForm = document.querySelector('.CodeMirror.cm-s-monokai');
+    styleForm.classList.add('codemirror-translation-request-form');
     contentEditor.getDoc().setValue('// Code here');
   }
 }
