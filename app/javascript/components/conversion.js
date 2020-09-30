@@ -273,10 +273,10 @@ const conversion = () => {
 
   const getPowertoPow = (aInput) => {
     // change a ** b to Math.pow(a, b)
-    const regex = /^(\s*)(.*)(\s*)\*\*(\s*)(.*)$/g;
+    const regex = /(\S+)\s*\*\*\s*(\S+)/g;
     let match;
     while (match = regex.exec(aInput)) {
-      aInput = aInput.replace(match[0], `Math.pow(${match[2]}, ${match[5]})`);
+      aInput = aInput.replace(match[0], `Math.pow(${match[1]}, ${match[2]})`);
     }
     return aInput;
   }
@@ -639,7 +639,11 @@ const conversion = () => {
     while (match = regex.exec(aInput)) {
       if (functionList.includes(match[1])) {
         let matchOne = getCorrectConvention(match[1]);
-        aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+        if (match[2]) {
+          aInput = aInput.replace(match[0], `${matchOne}${match[2]}`);
+        } else {
+          aInput = aInput.replace(match[0], `${matchOne}()`);
+        }
       }
     }
     return aInput;
@@ -712,7 +716,7 @@ const conversion = () => {
     event.preventDefault();
     let message = compile();
     output.value = "";
-    if (message !== "ERROR") {
+    if (message[0] !== "ERROR") {
       const input = document.getElementById('input').value;
       const lines = input.split("\n");
       lines.forEach((input, index) => {
@@ -771,7 +775,7 @@ const conversion = () => {
         input = getRange(input);
         input = getSemiColon(input);
         // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+        index === lines.length - 1 ? output.value +=  `${input}\n\n// Output:\n// ${message[0]}` : output.value +=  `${input}\n`;
         outputEditor.getDoc().setValue(output.value);
       });
       variableList.length = 0;
@@ -781,7 +785,7 @@ const conversion = () => {
       functionList.length = 0;
       instanceVariableList.length = 0;
     } else {
-      outputEditor.getDoc().setValue(`// Ruby Error or feature not supported!`);
+      outputEditor.getDoc().setValue(`// ${message[1]}`);
     }
   });
 
@@ -812,13 +816,14 @@ const conversion = () => {
 const compile = () => {
   const input = document.getElementById("input");
   let consoleOutput;
+  let errorMessage;
   try {
     consoleOutput = eval(Opal.compile(`${input.value}`));
   } catch (err) {
-    console.log(err);
+    errorMessage = err.message
     consoleOutput = "ERROR"
   }
-  return consoleOutput;
+  return [consoleOutput, errorMessage]
 }
 
 const activateConversion = () => {
