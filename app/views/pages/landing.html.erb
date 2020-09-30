@@ -12,7 +12,7 @@
         <p class="pb-5 w-75">
          CodeConverter is a platform designed to help Rubyists pick up JavaScript as fast as possible. We translate Ruby code on-the-fly and our members can get their Ruby or JavaScript code translated by our savvy community of coders.
        </p>
-       <div class="btn btn-primary rounded-pill py-3 px-5"> Convert Your Code Now </div>
+       <%= link_to("Convert Your Code Now", home_path, class: "btn btn-primary rounded-pill py-3 px-5")%>
      </div>
      <div class="col-6">
       <div class="landing-illustration">
@@ -57,7 +57,7 @@
         <i class="fas fa-terminal card-landing-logo"></i>
         <h3 class="py-3"> Get Translated </h3>
         <p class="pb-4"> CodeConverter is a platform designed to help Rubyists pick up JavaScript as fast as possible. </p>
-        <div class="btn btn-primary rounded-pill px-4 card-landing-cta">Try our converter</div>
+        <%= link_to("Try our converter", home_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
       </div>
     </div>
     <div class="col-4">
@@ -65,16 +65,17 @@
         <i class="fas fa-hands-helping card-landing-logo"></i>
         <h3 class="py-3"> Get Support </h3>
         <p class="pb-4"> The code you need is complex or ambiguous? No problem! Ask our community of code ninjas.</p>
-        <div class="btn btn-primary rounded-pill px-4 card-landing-cta">Request a Translation </div>
-      </div>
+        <%= link_to("Request a Translation", new_translation_request_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
+      </div>``
     </div>
     <div class="col-4">
       <div class="card-landing pt-3 px-4">
         <i class="fas fa-user-friends card-landing-logo"></i>
         <h3 class="py-3"> Get Involved </h3>
         <p class="pb-4"> Skilled in Ruby and JavaScript? Join our community of translators. Earn experience and get recognized in the industry</p>
-        <div class="btn btn-primary rounded-pill px-4 card-landing-cta">Translate a Snippet </div>
+         <%= link_to("Translate a Snippet", translation_requests_path, class: "btn btn-primary rounded-pill px-4 card-landing-cta") %>
       </div>
     </div>
   </div>
 </div>
+\
