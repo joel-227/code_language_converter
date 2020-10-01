@@ -863,15 +863,15 @@ const conversion = () => {
   document.addEventListener('keyup', (event) => {
     
     console.log(counter);
-    if (event.key === "ArrowLeft" && event.ctrlKey) {
+    if (event.key === "z") {
       counter--;
       if (counter < 1) counter = 1;
     }
-    if (event.key === "ArrowRight" && event.ctrlKey) {
+    if (event.key === "x") {
       counter++;
       if (counter > 4) counter = 4;
     }
-    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && event.ctrlKey) {
+    if (event.key === "z" || event.key === "x") {
       switch (counter) {
         case 1:
           testInput.value = `puts "hello world"`;
