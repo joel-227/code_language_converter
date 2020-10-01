@@ -9,7 +9,10 @@
         </div>
     <% end %>
     <p class="text-secondary pb-2"> Joined at <%= current_user.created_at.strftime('%b %d, %Y') %> </p>
-    <a class="btn-sm btn-primary"> Edit Your Profile </a>
+
+    <%= link_to "Edit your profile",
+                  edit_user_registration_path ,
+                  class: "btn btn-primary btn-sm rounded-pill" %>
   </div>
   <div class="profile-kudos">
     <i class="fas fa-award kudos-points"></i>

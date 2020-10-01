@@ -38,7 +38,7 @@ import activateConversion from "../components/conversion.js";
 import { translate } from '../plugins/translate.js';
 // import { clearForm } from '../plugins/clear_form.js';
 import codemirrorTranslationRequests from "../components/translation_request_codemirror"
-
+import { updateAvatarProfile } from '../components/update_avatar_profile.js';
 
 Prism.plugins.NormalizeWhitespace.setDefaults({
   'remove-trailing': true,
@@ -54,6 +54,7 @@ Prism.plugins.NormalizeWhitespace.setDefaults({
 
 
 document.addEventListener('turbolinks:load', () => {
+  //
   // Call your functions here, e.g:
   activateClipboard();
   addLike();
@@ -62,4 +63,5 @@ document.addEventListener('turbolinks:load', () => {
   activateConversion();
   Prism.highlightAll();
   codemirrorTranslationRequests();
+  updateAvatarProfile();
 });
