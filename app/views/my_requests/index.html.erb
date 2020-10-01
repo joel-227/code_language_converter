@@ -10,7 +10,7 @@
       <hr>
       <% @translation_requests.each  do |request|%>
 
-      <div class="card card-shadow">
+      <div class="card card-shadow mb-4">
         <div class="card-body">
             <pre>
               <code class=<%= request_highlight(request) %> > <%= request.content %>
@@ -21,9 +21,9 @@
             <div class="card-infos">
               <div class="card-infos-top d-flex justify-content-between pb-3">
                 <p class="text-secondary"> <%= request.created_at.strftime('%b %d, %Y') %> </p>
-                <p>
+                <p class='card-translation-tag'>
                 <span class= <%= text_class(request.original_language)%> >  <%= request.original_language.upcase %> </span> 
-                <i class="fas fa-arrow-right"></i>
+                <i class="fas fa-arrow-right text-light"></i>
                 <span class= <%= text_class(request.converted_language) %> > <%= request.converted_language.upcase %> </span> 
                 </p>
 

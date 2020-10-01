@@ -34,58 +34,63 @@
     // }
 
 
-    .btn-convert {
-      text-transform: uppercase;
-      font-size: 12px;
-      background-color: transparent;
-      border: solid 1px white;
-      border-radius: 5px;
-    }
+.btn-convert {
+  text-transform: uppercase;
+  font-size: 12px;
+  background-color: transparent;
+  border: solid 1px white;
+  border-radius: 5px;
+}
 
-    #form {
-      position: relative;
-      border-radius: 12px;
-    }
+#form {
+  position: relative;
+  border-radius: 12px;
+}
 
-    .form-converter {
-      background-color: #272822;
-      padding-right: 40px;
-    }
+.form-converter {
+  background-color: #272822;
+  padding-right: 40px;
+}
 
-    .copy-logo-home {
-      opacity: 0.5;
-      font-size: 12px;
-    }
+.copy-logo-home {
+  opacity: 0.5;
+  font-size: 12px;
+}
 
-    .absolute {
-      position: absolute;
-      color: white;
-      right: 24px;
-      top: 8px;
-    }
+.copy-logo-home:hover {
+  color: $primary;
+  cursor: pointer;
+}
 
-    .clear-button {
-      color: white;
-      top: 6px;
-      right: 12px;
-      opacity: 0.5;
-      z-index: 3;
-    }
+.absolute {
+  position: absolute;
+  color: white;
+  right: 24px;
+  top: 8px;
+}
 
-    .clear-button:hover {
-      color: $primary;
-      cursor: pointer;
-    }
+.clear-button {
+  color: white;
+  top: 6px;
+  right: 12px;
+  opacity: 0.5;
+  z-index: 3;
+}
 
-    .bg-code {
-      background-color: #272822;
-    }
+.clear-button:hover {
+  color: $primary;
+  cursor: pointer;
+}
+
+.bg-code {
+  background-color: #272822;
+}
 
 
-    .translator-offset {
-      padding-top: 6px;
-    }
+.translator-offset {
+  padding-top: 6px;
+}
 
-    .radius-top {
-      border-radius: 16px 16px 0px 0px;
-    }
+  .radius-top {
+    border-radius: 16px 16px 0px 0px;
+  }

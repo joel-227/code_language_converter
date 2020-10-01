@@ -8,8 +8,12 @@ function tryClipboard() {
 const getValueExceptOutput = (input) => {
   // input = def square(x)\n  return x * x\nend\n\n# Output\n# something
   const regex = /\n\n\/\/ Output:.*/gs;
+  const regexTwo = /\n\n\/\/ WARNING:.*/gs;
   let match;
   if (match = regex.exec(input)) {
+    input = input.replace(match[0], "");
+  }
+  if (match = regexTwo.exec(input)) {
     input = input.replace(match[0], "");
   }
   return input;

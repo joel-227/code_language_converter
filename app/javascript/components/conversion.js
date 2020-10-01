@@ -467,8 +467,8 @@ const conversion = () => {
   }
 
   const getRange = (aInput) => {
-    const regex = /\((\d+)\.\.(\d+)\)/g;
-    const regexTwo = /\((\d+)\.\.\.(\d+)\)/g;
+    const regex = /\((\d+)\.\.(\d+)\)(\.to_a)?/g;
+    const regexTwo = /\((\d+)\.\.\.(\d+)\)(\.to_a)?/g;
     let match;
     let matchTwo;
     if (match = regex.exec(aInput)) {
@@ -723,91 +723,96 @@ const conversion = () => {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    let message = compile();
+    
     output.value = "";
-    if (message[0] !== "ERROR") {
-      const input = document.getElementById('input').value;
-      const lines = input.split("\n");
-      lines.forEach((input, index) => {
-        input = getClassDefinition(input);
-        input = ignoreClassPublicPrivate(input);
-        input = getClassConstructor(input);
-        input = getInstanceCall(input);
-        input = getConditional(input);
-        input = getFunctionCall(input);
-        input = getFunctionDefinition(input);
-        input = getToUpperCase(input);
-        input = getToLowerCase(input);
-        input = getPush(input);
-        input = getSplice(input);
-        input = getEmptytoLength(input);
-        input = getInterpolation(input);
-        input = getToInt(input);
-        input = getSample(input);
-        input = getClassToTypeOf(input);
-        input = getFirst(input);
-        input = getFirstN(input);
-        input = getLastN(input);
-        input = getLast(input);
-        input = getToS(input);
-        input = getLastElement(input);
-        input = getSubString(input);
-        input = getThis(input);
-        input = getHashToObject(input);
-        input = getHashKeyValue(input);
-        input = getCallHash(input);
-        input = getVariable(input);
-        input = getVariableDefinition(input);
-        input = getPutsToConsoleLog(input);
-        input = getAllToEvery(input);
-        input = getIncludeToIncludes(input);
-        input = getEndToBracket(input);
-        input = getForEach(input);
-        input = getReduce(input);
-        input = getMap(input);
-        input = getSelect(input);
-        input = getFind(input);
-        input = getReturnOneLineIf(input);
-        input = getIf(input);
-        input = getPowertoPow(input);
-        input = getElse(input);
-        input = getElseIf(input);
-        input = getAnd(input);
-        input = getOr(input);
-        input = getStrip(input);
-        input = getFDiv(input);
-        input = getDiv(input);
-        input = getZeroToNInclusiveArray(input);
-        input = getZeroToNExclusiveArray(input);
-        input = getDestructiveReverse(input);
-        input = getNilToUndefined(input);
-        input = getRange(input);
-        input = getSemiColon(input);
-        input = ignoreComments(input);
-        // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
-        index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
-        outputEditor.getDoc().setValue(output.value);
-      });      
-      let outputValue = outputEditor.getDoc().getValue();
-      // if the last three elements are newlines, remove it
-      if (isLastThreeNewlines(outputValue)) {
-        outputValue = outputValue.substring(0, outputValue.length - 3);
-      }
-      outputValue = outputValue + `\n\n// Output:\n// ${eval(outputValue)}`;
-      outputEditor.getDoc().setValue(outputValue);
-
-      let inputValue = getValueExceptOutput(inputEditor.getDoc().getValue()) + `\n\n# Output:\n# ${message[0]}`;
-      inputEditor.getDoc().setValue(inputValue);
-      
-      variableList.length = 0;
-      functionParamList.length = 0;
-      blockList.length = 0;
-      objectList.length = 0;
-      functionList.length = 0;
-      instanceVariableList.length = 0;
-    } else {
-      outputEditor.getDoc().setValue(`// ${message[1]}`);
+    
+    const input = document.getElementById('input').value;
+    const lines = input.split("\n");
+    lines.forEach((input, index) => {
+      input = getClassDefinition(input);
+      input = ignoreClassPublicPrivate(input);
+      input = getClassConstructor(input);
+      input = getInstanceCall(input);
+      input = getConditional(input);
+      input = getFunctionCall(input);
+      input = getFunctionDefinition(input);
+      input = getToUpperCase(input);
+      input = getToLowerCase(input);
+      input = getPush(input);
+      input = getSplice(input);
+      input = getEmptytoLength(input);
+      input = getInterpolation(input);
+      input = getToInt(input);
+      input = getSample(input);
+      input = getClassToTypeOf(input);
+      input = getFirst(input);
+      input = getFirstN(input);
+      input = getLastN(input);
+      input = getLast(input);
+      input = getToS(input);
+      input = getLastElement(input);
+      input = getSubString(input);
+      input = getThis(input);
+      input = getHashToObject(input);
+      input = getHashKeyValue(input);
+      input = getCallHash(input);
+      input = getVariable(input);
+      input = getVariableDefinition(input);
+      input = getPutsToConsoleLog(input);
+      input = getAllToEvery(input);
+      input = getIncludeToIncludes(input);
+      input = getEndToBracket(input);
+      input = getForEach(input);
+      input = getReduce(input);
+      input = getMap(input);
+      input = getSelect(input);
+      input = getFind(input);
+      input = getReturnOneLineIf(input);
+      input = getIf(input);
+      input = getPowertoPow(input);
+      input = getElse(input);
+      input = getElseIf(input);
+      input = getAnd(input);
+      input = getOr(input);
+      input = getStrip(input);
+      input = getFDiv(input);
+      input = getDiv(input);
+      input = getZeroToNInclusiveArray(input);
+      input = getZeroToNExclusiveArray(input);
+      input = getDestructiveReverse(input);
+      input = getNilToUndefined(input);
+      input = getRange(input);
+      input = getSemiColon(input);
+      input = ignoreComments(input);
+      // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
+      index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
+      outputEditor.getDoc().setValue(output.value);
+    });      
+    let outputValue = outputEditor.getDoc().getValue();
+    // if the last three elements are newlines, remove it
+    if (isLastThreeNewlines(outputValue)) {
+      outputValue = outputValue.substring(0, outputValue.length - 3);
     }
+    try {
+      outputValue = outputValue + `\n\n// Output:\n// ${eval(outputValue)}`;
+    } catch (err) {
+      console.log(err);
+    }
+    let message = compile();
+    if (message[0] === "ERROR") {
+      outputValue = outputValue + `\n\n// WARNING: ${message[1]}\n// Use at your own risk!`;
+    }
+    outputEditor.getDoc().setValue(outputValue);
+
+    let inputValue = getValueExceptOutput(inputEditor.getDoc().getValue()) + `\n\n# Output:\n# ${message[0]}`;
+    inputEditor.getDoc().setValue(inputValue);
+    
+    variableList.length = 0;
+    functionParamList.length = 0;
+    blockList.length = 0;
+    objectList.length = 0;
+    functionList.length = 0;
+    instanceVariableList.length = 0;
   });
 
 
