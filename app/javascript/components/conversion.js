@@ -793,6 +793,7 @@ const conversion = () => {
       outputEditor.getDoc().setValue(outputValue);
 
       let inputValue = inputEditor.getDoc().getValue() + `\n\n# Output:\n# ${message[0]}`;
+      console.log(inputValue);
       inputEditor.getDoc().setValue(inputValue);
       
       variableList.length = 0;

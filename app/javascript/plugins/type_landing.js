@@ -19,7 +19,7 @@ const typeLanding  = () => {
 
   let jsOptions = {
       strings: ['why you so buggy',
-            '<span class="ruby-code keyword">class</span> <span class="ruby-code class">Square { </span>\n<span class="ruby-code keyword">  function</span> <span class="ruby-code method">getArea</span>(size) {\n    return size <span class="ruby-code operator">* </span>size;\n  }\n}'
+            '<span class="ruby-code keyword">class</span> <span class="ruby-code class">Square { </span>\n<span class="ruby-code keyword">  </span> <span class="ruby-code method">getArea</span>(size) {\n    return size <span class="ruby-code operator">* </span>size;\n  }\n}'
             ],
   typeSpeed: 40,
   }
