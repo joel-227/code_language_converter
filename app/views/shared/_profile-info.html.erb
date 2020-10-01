@@ -1,7 +1,7 @@
 
 <div class="profile-info d-flex justify-content-around align-items-center py-4">
   <div class="profile-edit">
-    <% if current_user.image_url %> 
+    <% if current_user.image_url %>
       <img class="avatar-large pb-2" src= <%= current_user.image_url %> alt="">
     <% else %>
       <div class="avatar-missing avatar dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
