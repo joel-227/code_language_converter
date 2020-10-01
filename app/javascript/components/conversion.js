@@ -787,13 +787,16 @@ const conversion = () => {
         // output.insertAdjacentHTML('beforeend', `<p>${input}</p>`);
         index === lines.length - 1 ? output.value +=  `${input}` : output.value +=  `${input}\n`;
         outputEditor.getDoc().setValue(output.value);
-      });
+      });      
       let outputValue = outputEditor.getDoc().getValue();
+      // if the last three elements are newlines, remove it
+      if (isLastThreeNewlines(outputValue)) {
+        outputValue = outputValue.substring(0, outputValue.length - 3);
+      }
       outputValue = outputValue + `\n\n// Output:\n// ${eval(outputValue)}`;
       outputEditor.getDoc().setValue(outputValue);
 
-      let inputValue = inputEditor.getDoc().getValue() + `\n\n# Output:\n# ${message[0]}`;
-      console.log(inputValue);
+      let inputValue = getValueExceptOutput(inputEditor.getDoc().getValue()) + `\n\n# Output:\n# ${message[0]}`;
       inputEditor.getDoc().setValue(inputValue);
       
       variableList.length = 0;
@@ -829,6 +832,30 @@ const conversion = () => {
     
     if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
   });
+}
+
+const getValueExceptOutput = (input) => {
+  // input = def square(x)\n  return x * x\nend\n\n# Output\n# something
+  const regex = /\n\n# Output:.*/gs;
+  let match;
+  if (match = regex.exec(input)) {
+    input = input.replace(match[0], "");
+  }
+  return input
+}
+
+const isLastThreeNewlines = (outputValue) => {
+  let charArr = outputValue.split("");
+  let count = 0;
+  for (let i = 1; i <= 3; i++) {
+    if (charArr[charArr.length - i] === `\n`) {
+      count++;
+    }
+  }
+  if (count === 3) {
+    return true;
+  }
+  return false;
 }
 
 const compile = () => {
