@@ -732,6 +732,33 @@ const conversion = () => {
     return aInput;
   }
 
+  const getNegative = (aInput) => {
+    const regex = /(\.negative\?)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], " < 0");
+    }
+    return aInput;
+  }
+
+  const getPositive = (aInput) => {
+    const regex = /(\.positive\?)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], " > 0");
+    }
+    return aInput;
+  }
+
+  const getMathPI = (aInput) => {
+    const regex = /(Math::PI)/g;
+    let match;
+    while (match = regex.exec(aInput)) {
+      aInput = aInput.replace(match[0], "Math.PI");
+    }
+    return aInput;
+  }
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     
@@ -751,6 +778,9 @@ const conversion = () => {
       input = getToLowerCase(input);
       input = getPush(input);
       input = getSplice(input);
+      input = getNegative(input);
+      input = getPositive(input);
+      input = getMathPI(input);
       input = getEmptytoLength(input);
       input = getInterpolation(input);
       input = getToInt(input);
