@@ -476,7 +476,7 @@ const conversion = () => {
     let matchTwo;
     while (match = regex.exec(aInput)) {
       if (isRangeOneDec) {
-        let rangeOneDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i <= b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n`
+        let rangeOneDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i <= b; i++) {\n    result.push(i);\n  }\n  return result;\n}\n\n`
         aInput = rangeOneDec + aInput.replace(match[0], `range(${match[1]}, ${match[2]})`);
         isRangeOneDec = false;
       } else {
@@ -485,7 +485,7 @@ const conversion = () => {
     }
     while (matchTwo = regexTwo.exec(aInput)) {
       if (isRangeTwoDec) {
-        let rangeTwoDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i < b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n`
+        let rangeTwoDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i < b; i++) {\n    result.push(i);\n  }\n  return result;\n}\n\n`
         aInput = rangeTwoDec + aInput.replace(matchTwo[0], `range(${matchTwo[1]}, ${matchTwo[2]})`);
         isRangeTwoDec = false;
       }
@@ -886,7 +886,7 @@ const conversion = () => {
           inputEditor.getDoc().setValue(testInput.value);
           break;
         case 4:
-          testInput.value = `random_number = (1..3).to_a.sample\nresult = ""\nif random_number == 1\n  result = "one"\nelsif random_number == 2\n  result = "two"\nelse\n  result = "three"\nend\nresult`;
+          testInput.value = `(1..100).to_a`;
           inputEditor.getDoc().setValue(testInput.value);
           break;
         // case 5:
