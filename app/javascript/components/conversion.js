@@ -476,7 +476,7 @@ const conversion = () => {
     let matchTwo;
     while (match = regex.exec(aInput)) {
       if (isRangeOneDec) {
-        let rangeOneDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i <= b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n`
+        let rangeOneDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i <= b; i++) {\n    result.push(i);\n  }\n  return result;\n}\n\n`
         aInput = rangeOneDec + aInput.replace(match[0], `range(${match[1]}, ${match[2]})`);
         isRangeOneDec = false;
       } else {
@@ -485,7 +485,7 @@ const conversion = () => {
     }
     while (matchTwo = regexTwo.exec(aInput)) {
       if (isRangeTwoDec) {
-        let rangeTwoDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i < b; i++) {\n    result.push(i);\n  }\n  return result\n}\n\n`
+        let rangeTwoDec = `const range = (a, b) => {\n  let result = [];\n  for (let i = a; i < b; i++) {\n    result.push(i);\n  }\n  return result;\n}\n\n`
         aInput = rangeTwoDec + aInput.replace(matchTwo[0], `range(${matchTwo[1]}, ${matchTwo[2]})`);
         isRangeTwoDec = false;
       }
@@ -859,44 +859,44 @@ const conversion = () => {
   });
 
 
-  const testInput = document.getElementById('input');
-  document.addEventListener('keyup', (event) => {
+  // const testInput = document.getElementById('input');
+  // document.addEventListener('keyup', (event) => {
     
-    console.log(counter);
-    if (event.key === "ArrowLeft" && event.ctrlKey) {
-      counter--;
-      if (counter < 1) counter = 1;
-    }
-    if (event.key === "ArrowRight" && event.ctrlKey) {
-      counter++;
-      if (counter > 4) counter = 4;
-    }
-    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && event.ctrlKey) {
-      switch (counter) {
-        case 1:
-          testInput.value = `puts "hello world"`;
-          inputEditor.getDoc().setValue(testInput.value);
-          break;
-        case 2:
-          testInput.value = `my_pets = ['dog', 'cat', 'fish']\nmy_pets.sample`;
-          inputEditor.getDoc().setValue(testInput.value);
-          break;
-        case 3:
-          testInput.value = `numbers = [1, 2, 3, 4, 5]\nnumbers.each do |number|\n  if number % 2 == 0\n    puts "Number: #{number} is even!"\n  end\nend`;
-          inputEditor.getDoc().setValue(testInput.value);
-          break;
-        case 4:
-          testInput.value = `random_number = (1..3).to_a.sample\nresult = ""\nif random_number == 1\n  result = "one"\nelsif random_number == 2\n  result = "two"\nelse\n  result = "three"\nend\nresult`;
-          inputEditor.getDoc().setValue(testInput.value);
-          break;
-        // case 5:
-        //   testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\njohn.overtime\njohn.pay`;
-        //   inputEditor.getDoc().setValue(testInput.value);
-        //   break;
-      }
-    }
-    if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
-  });
+  //   console.log(counter);
+  //   if (event.key === "z") {
+  //     counter--;
+  //     if (counter < 1) counter = 1;
+  //   }
+  //   if (event.key === "x") {
+  //     counter++;
+  //     if (counter > 4) counter = 4;
+  //   }
+  //   if (event.key === "z" || event.key === "x") {
+  //     switch (counter) {
+  //       case 1:
+  //         testInput.value = `puts "hello world"`;
+  //         inputEditor.getDoc().setValue(testInput.value);
+  //         break;
+  //       case 2:
+  //         testInput.value = `my_pets = ['dog', 'cat', 'fish']\nmy_pets.sample`;
+  //         inputEditor.getDoc().setValue(testInput.value);
+  //         break;
+  //       case 3:
+  //         testInput.value = `numbers = [1, 2, 3, 4, 5]\nnumbers.each do |number|\n  if number % 2 == 0\n    puts "Number: #{number} is even!"\n  end\nend`;
+  //         inputEditor.getDoc().setValue(testInput.value);
+  //         break;
+  //       case 4:
+  //         testInput.value = `(1..100).to_a`;
+  //         inputEditor.getDoc().setValue(testInput.value);
+  //         break;
+  //       // case 5:
+  //       //   testInput.value = `class Person\n  attr_accessor :first, :last, :pay\n\n  def initialize(first, last, pay)\n    @first = first\n    @last = last\n    @pay = pay\n  end\nend\n\nclass Worker < Person\n  def overtime\n    @pay += 10000\n  end\nend\n\njohn = Worker.new('John', 'Smith', 10000)\njohn.overtime\njohn.pay`;
+  //       //   inputEditor.getDoc().setValue(testInput.value);
+  //       //   break;
+  //     }
+  //   }
+  //   if (inputEditor.getDoc().getValue() === "") outputEditor.getDoc().setValue("");
+  // });
 }
 
 const getValueExceptOutput = (input) => {
